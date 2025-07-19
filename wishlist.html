@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wishlist</title>
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style.css">
+  
+ <style>
+      :root {
+        --header-height: 80px;
+      }
+  
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+  
+      body {
+        font-family: sans-serif;
+        background-color: #ffffff;
+      }
+  
+      /* Header */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: var(--header-height);
+        background-color: #ffc7de;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+        z-index: 999;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+  
+      header img {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #4a2c2a;
+      }
+  
+      nav {
+        display: flex;
+        gap: 20px;
+      }
+  
+      nav a {
+        font-family: 'Great Vibes', cursive;
+        font-size: 1.3rem;
+        color: #4a2c2a;
+        text-decoration: none;
+        background: #fff;
+        padding: 8px 16px;
+        border-radius: 30px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: background 0.3s, color 0.3s;
+      }
+  
+      nav a:hover {
+        background: #fddde6;
+        color: #000;
+      }
+  
+      .menu-toggle {
+        display: none;
+        font-size: 1.8rem;
+        cursor: pointer;
+        color: #4a2c2a;
+      }
+  
+      .bag-icon {
+        display: none;
+        font-size: 1.6rem;
+        color: #4a2c2a;
+        margin-right: 20px;
+      }
+  
+      @media (max-width: 768px) {
+        nav {
+          position: absolute;
+          top: var(--header-height);
+          left: 0;
+          width: 100%;
+          flex-direction: column;
+          background: #ffe6f0;
+          display: none;
+          padding: 20px 0;
+        }
+  
+        nav.show {
+          display: flex;
+        }
+  
+        .menu-toggle {
+          display: block;
+        }
+  
+  
+      }
+  
+      /* Slideshow Background */
+      .slideshow {
+        position: absolute;
+        top: var(--header-height);
+        left: 0;
+        width: 100%;
+        height: calc(100vh - var(--header-height));
+        overflow: hidden;
+        z-index: -1;
+      }
+  
+      .slideshow img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        animation: fade 12s infinite;
+      }
+  
+      .slideshow img:nth-child(1) { animation-delay: 0s; }
+      .slideshow img:nth-child(2) { animation-delay: 4s; }
+      .slideshow img:nth-child(3) { animation-delay: 8s; }
+  
+      @keyframes fade {
+        0%, 33.333%, 100% { opacity: 0; }
+        8.333%, 25% { opacity: 1; }
+      }
+  
+      main {
+        padding-top: var(--header-height);
+        text-align: center;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+      }
+  
+      .hero-title {
+        font-family: 'Great Vibes', cursive;
+        font-size: 3.5rem;
+        color: #4a2c2a;
+        animation: typing 3s steps(12), blink 0.8s step-end infinite;
+        white-space: nowrap;
+        overflow: hidden;
+        border-right: 3px solid #4a2c2a;
+        margin-bottom: 20px;
+        background-color: rgba(255, 255, 255, 0.7);
+        padding: 0 15px;
+        border-radius: 10px;
+      }
+  
+      @keyframes typing {
+        from { width: 0; }
+        to { width: 100%; }
+      }
+  
+      @keyframes blink {
+        50% { border-color: transparent; }
+      }
+  
+      .shop-now-btn {
+        font-family: 'Great Vibes', cursive;
+        background-color: #fddde6;
+        color: #4a2c2a;
+        font-size: 1.5rem;
+        padding: 10px 30px;
+        border: none;
+        border-radius: 40px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+      }
+  
+      .shop-now-btn:hover {
+        background-color: #ffc2d1;
+      }
+  
+      audio {
+        display: none;
+      }
+    </style>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Helvetica Neue', sans-serif;
+      background-color: #fff;
+    }
+
+    /* Navigation and Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background-color: #f7f7f7;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    header img {
+      height: 50px;
+    }
+
+    #mobile-menu a {
+      margin: 0 12px;
+      color: #000;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    #mobile-menu a:hover {
+      text-decoration: underline;
+    }
+
+    .bag-icon,
+    .menu-toggle {
+      font-size: 20px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+    #page-header {
+      text-align: center;
+      padding: 100px 0 40px;
+      background-color: #f0f0f0;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 32px;
+    }
+
+    /* Wishlist Icon with Count */
+    #wishlist-count-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    #wishlist-count-wrapper .fas.fa-heart {
+      color: crimson;
+      font-size: 20px;
+    }
+
+    #wishlist-count-wrapper span {
+      position: absolute;
+      top: -8px;
+      right: -12px;
+      background: crimson;
+      color: white;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 50%;
+    }
+
+    /* Sections */
+    .toggle-button {
+      display: block;
+      margin: 30px auto 10px;
+      padding: 10px 20px;
+      background-color: #222;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    #product-list, #wishlist-section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .product, .wishlist-item {
+      background: #fff;
+      border-radius: 15px;
+      width: 220px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      position: relative;
+      transition: transform 0.3s;
+    }
+
+    .product:hover, .wishlist-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .product img, .wishlist-item img {
+      width: 100%;
+      border-radius: 12px;
+    }
+
+    /* Heart Button */
+    .heart {
+      color: #ccc;
+      font-size: 20px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .heart.active {
+      color: crimson;
+    }
+
+    /* Wishlist Decorations */
+    .wishlist-item::before,
+    .wishlist-item::after {
+      content: '💖';
+      position: absolute;
+      font-size: 18px;
+    }
+
+    .wishlist-item::before {
+      top: 10px;
+      left: 10px;
+    }
+
+    .wishlist-item::after {
+      top: 10px;
+      right: 10px;
+    }
+
+    /* Remove Button */
+    .remove-btn {
+      background-color: crimson;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      margin-top: 10px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .remove-btn:hover {
+      background-color: #b2002f;
+    }
+
+    .empty-msg {
+      text-align: center;
+      padding: 50px;
+      font-style: italic;
+      color: #666;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header>
+    <img src="BJLOGO.png" alt="Bibijanelle Logo" />
+    <nav id="mobile-menu">
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="blog.html">Blog</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a class="bart" href="wishlist.html" id="wishlist-count-wrapper">
+        <i class="fas fa-heart"></i>
+        <span id="wishlist-count">0</span>
+      </a>
+    </nav>
+    <div style="display: flex; align-items: center;">
+      <i class="fas fa-shopping-bag bag-icon"></i>
+      <i class="fas fa-bars menu-toggle" onclick="toggleMenu()"></i>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <section id="page-header">
+    <h2>#Stayhome</h2>
+    <p>Save More</p>
+  </section>
+
+  <h1>My Wishlist</h1>
+
+  <!-- Toggle Products Button -->
+  <button class="toggle-button" onclick="toggleProducts()">Toggle Product List</button>
+
+  <!-- All Products -->
+  <section id="product-list">
+    <!-- JS Populated -->
+  </section>
+
+  <!-- Wishlist Items -->
+  <section id="wishlist-section">
+    <!-- JS Populated -->
+  </section>
+
+  <script>
+    const products = [
+      { id: 1, name: "Beaded Necklace", img: "images/A1.png", price: 25 },
+      { id: 2, name: "Necklace", img: "images/A2.png", price: 15 },
+      { id: 3, name: "Necklace", img: "images/A3.png", price: 35 },
+      { id: 4, name: "Necklace", img: "images/A4.png", price: 18 },
+      { id: 5, name: "Necklace", img: "images/A5.png", price: 18 },
+      { id: 6, name: "Bracelet", img: "images/B1.png", price: 18 },
+        { id: 7, name: "Bracelet", img: "images/B2.png", price: 18 },
+          { id: 8, name: "Bracelet", img: "images/B3.png", price: 18 },
+            { id: 9, name: "Bracele", img: "images/B4.png", price: 18 }
+    ];
+
+    const productList = document.getElementById("product-list");
+    const wishlistSection = document.getElementById("wishlist-section");
+    const wishlistCount = document.getElementById("wishlist-count");
+
+    function toggleProducts() {
+      productList.style.display = productList.style.display === "none" ? "flex" : "none";
+    }
+
+    function getWishlist() {
+      return JSON.parse(localStorage.getItem("wishlist")) || [];
+    }
+
+    function saveWishlist(wishlist) {
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    }
+
+    function isInWishlist(id) {
+      return getWishlist().some(p => p.id === id);
+    }
+
+    function addToWishlist(product) {
+      let wishlist = getWishlist();
+      if (!isInWishlist(product.id)) {
+        wishlist.push(product);
+        saveWishlist(wishlist);
+        renderWishlist();
+        updateCount();
+        updateHearts();
+      }
+    }
+
+    function removeFromWishlist(id) {
+      let wishlist = getWishlist().filter(p => p.id !== id);
+      saveWishlist(wishlist);
+      renderWishlist();
+      updateCount();
+      updateHearts();
+    }
+
+    function toggleWishlist(product) {
+      if (isInWishlist(product.id)) {
+        removeFromWishlist(product.id);
+      } else {
+        addToWishlist(product);
+      }
+    }
+
+    function renderProducts() {
+      productList.innerHTML = '';
+      products.forEach(product => {
+        const div = document.createElement("div");
+        div.className = "product";
+        div.innerHTML = `
+          <img src="${product.img}" alt="${product.name}">
+          <p><strong>${product.name}</strong></p>
+          <p>£${product.price}</p>
+          <i class="fas fa-heart heart ${isInWishlist(product.id) ? 'active' : ''}" 
+             onclick='toggleWishlist(${JSON.stringify(product)})'></i>
+        `;
+        productList.appendChild(div);
+      });
+    }
+
+    function renderWishlist() {
+      const wishlist = getWishlist();
+      wishlistSection.innerHTML = wishlist.length === 0
+        ? `<p class="empty-msg">Your wishlist is empty.</p>` : '';
+      wishlist.forEach(product => {
+        const div = document.createElement("div");
+        div.className = "wishlist-item";
+        div.innerHTML = `
+          <img src="${product.img}" alt="${product.name}">
+          <p><strong>${product.name}</strong></p>
+          <p>£${product.price}</p>
+          <button class="remove-btn" onclick="removeFromWishlist(${product.id})">Remove</button>
+        `;
+        wishlistSection.appendChild(div);
+      });
+    }
+
+    function updateHearts() {
+      document.querySelectorAll(".product .heart").forEach((icon, index) => {
+        const product = products[index];
+        icon.classList.toggle("active", isInWishlist(product.id));
+      });
+    }
+
+    function updateCount() {
+      wishlistCount.textContent = getWishlist().length;
+    }
+
+    function toggleMenu() {
+      document.getElementById("mobile-menu").classList.toggle("show");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderProducts();
+      renderWishlist();
+      updateCount();
+    });
+  </script>
+
+</body>
+</html>

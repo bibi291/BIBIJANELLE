@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bibiire's Website</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link rel="stylesheet" href="style.css">
+    <script src="bibi.js" async></script>
+</head>
+
+<body>
+    <section>
+        <marquee>Welcome to my site</marquee>
+    </section>
+    <SEction id="header">
+        <a href="#"><img src="kept.jpg" class="logo" width="0%"  alt=""></a>
+
+        <div>
+            <ul id="navbar"> 
+                <li><a class="active" href="INDEX.HTML">home</a></li>
+                <li><a href="shop.html">shop</a></li>
+                <li><a href="blog.html">blog</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">contact</a></li>
+                <li class="cart" id="lg-bag"><a href="cart.html"><i class="fas fa-shopping-bag"></i><span>0</span></a></li>
+                <a href="#" id="close"><i class="fas fa-times"></i></a>
+            </ul>
+        </div>
+        <div id="mobile">
+            <a href="cart.html"><i class="fas fa-shopping-bag"></i></a>
+            <i id="bar" class="fas fa-outdent"></i>
+        </div>
+        
+    </SEction>
+
+    <section id="hero">
+        <div class="slideshow-container">
+            <div class="slide fade">
+                <!-- Video -->
+                <video autoplay muted loop id="videoBG">
+                    <source src="V.mp4" type="video/mp4">
+                    Your browser does not support HTML5 video.
+                </video>
+                <div class="text">Amazing</div>
+            </div>
+    
+            <div class="slide fade">
+                <!-- Background Image 1 -->
+                <div class="image" style="background-image: url('kept.jpg');"></div>
+                <div class="text">Wonderful</div>
+            </div>
+    
+            <div class="slide fade">
+                <!-- Background Image 2 -->
+                <div class="image" style="background-image: url('kiki.jpeg');"></div>
+                <div class="text">Creativity</div>
+            </div>
+    
+            <!-- Navigation dots -->
+            <div style="text-align:center">
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+            </div>
+        </div>
+    </section>
+
+    
+<style>
+    .slideshow-container {
+    position: relative;
+    max-width: 100%;
+}
+
+.slide {
+    display: none;
+    width: 100%;
+    height: 100vh;
+    position: relative;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+.text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 24px;
+}
+
+.fade {
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+
+@keyframes fade {
+    from {opacity: .4}
+    to {opacity: 1}
+}
+
+/* The dots/bullets/indicators */
+.dot {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+
+.active {
+    background-color: #717171;
+}
+
+</style>
+
+<script>
+    let slideIndex = 1;
+showSlides(slideIndex);
+
+// Next/previous controls
+function plusSlides(n) {
+    showSlides(slideIndex += n);
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+    showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+    let i;
+    const slides = document.getElementsByClassName("slide");
+    const dots = document.getElementsByClassName("dot");
+    if (n > slides.length) {
+        slideIndex = 1;
+    }
+    if (n < 1) {
+        slideIndex = slides.length;
+    }
+    for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
+    for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+    }
+    slides[slideIndex - 1].style.display = "block";
+    dots[slideIndex - 1].className += " active";
+}
+
+</script>
+
+
+
+    
+    <section id="hero">
+  
+        <h1>IRIBI</h1>
+        <h2>Everything looks better when it's beaded</h2>
+
+        <button>Shop Now</button>
+    </section>
+
+
+
+    <section id="feature" class=".section-p1">
+        <div class="fe-box">
+            <img src="ty.png" alt="">
+            <h6>Free Shipping</h6>
+        </div>
+        <div class="fe-box">
+            <img src="by.png" alt="">
+            <h6>Online Order</h6>
+        </div>
+        <div class="fe-box">
+            <img src="pick.png" alt="">
+            <h6>Save Money</h6>
+        </div>
+        <div class="fe-box">
+            <img src="ly.png" alt="">
+            <h6>Promotions</h6>
+        </div>
+        <div class="fe-box">
+            <img src="cqke.png" alt="">
+            <h6>Happy Sell</h6>
+        </div>
+        <div class="fe-box">
+            <img src="pake.png" alt="">
+            <h6>F24/7 Support</h6>
+        </div>
+        
+    </section>
+
+    
+
+    <section id="product1" class=".section-p1">
+        <h2>Featured Products</h2>
+        <p>Summer Collection</p>
+        <div class="pro-container">
+            <div class="pro">
+                <img src="blue.png" alt="">
+                <div class="des">
+                    <span>Iribi</span>
+                    <h5>Multicolored beaded bag</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>£47</h4>
+                 </div>
+                 <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+            <div class="pro">
+                <img src="Red.png" alt="">
+                <div class="des">
+                    <span>Iribi</span>
+                    <h5>Multicolored beaded bag</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>£47</h4>
+                 </div>
+                 <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+            <div class="pro">
+                <img src="POP.jpg" alt="">
+                <div class="des">
+                    <span>Iribi</span>
+                    <h5>Multicolored beaded bag</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>£47</h4>
+                 </div>
+                 <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+            <div class="pro">
+                <img src="chichi.jpg" alt="">
+                <div class="des">
+                    <span>Iribi</span>
+                    <h5>Multicolored beaded bag</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>£47</h4>
+                 </div>
+                 <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+            <div class="pro">
+                <img src="chichi.jpg" alt="">
+                <div class="des">
+                    <span>Iribi</span>
+                    <h5>Multicolored beaded bag</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>£47</h4>
+                 </div>
+                 <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+            <div class="pro">
+                <img src="chichi.jpg" alt="">
+                <div class="des">
+                    <span>Iribi</span>
+                    <h5>Multicolored beaded bag</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>£47</h4>
+                 </div>
+                 <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+            <div class="pro">
+                <img src="chichi.jpg" alt="">
+                <div class="des">
+                    <span>Iribi</span>
+                    <h5>Multicolored beaded bag</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>£47</h4>
+                 </div>
+                 <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+            <div class="pro">
+                <img src="chichi.jpg" alt="">
+                <div class="des">
+                    <span>Iribi</span>
+                    <h5>Multicolored beaded bag</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>£47</h4>
+                 </div>
+                 <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+        </div>
+
+    </section>
+
+    <section id="banner" class=".section-m1">
+        <h4>Repair Service</h4>
+        <h2> Up to <span>70% off</span>- All Bags</h2>
+        <button class="normal" CL>Explore More</button>
+    </section>
+
+    <section id="product1" class=".section-p1">
+        <h2>Featured Products</h2>
+        <p>Summer Collection</p>
+        <div class="pro-container">
+            <div class="pro">
+                <img src="chichi.jpg" alt="">
+                <div class="des">
+                    <span>Iribi</span>
+                    <h5>Multicolored beaded bag</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>£47</h4>
+                 </div>
+                 <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+            <div class="pro">
+                <img src="POP.jpg" alt="">
+                <div class="des">
+                    <span>Iribi</span>
+                    <h5>Multicolored beaded bag</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>£47</h4>
+                 </div>
+                 <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+            <div class="pro">
+                <img src="POP.jpg" alt="">
+                <div class="des">
+                    <span>Iribi</span>
+                    <h5>Multicolored beaded bag</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>£47</h4>
+                 </div>
+                 <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+            <div class="pro">
+                <img src="chichi.jpg" alt="">
+                <div class="des">
+                    <span>Iribi</span>
+                    <h5>Multicolored beaded bag</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>£47</h4>
+                 </div>
+                 <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+            <div class="pro">
+                <img src="chichi.jpg" alt="">
+                <div class="des">
+                    <span>Iribi</span>
+                    <h5>Multicolored beaded bag</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>£47</h4>
+                 </div>
+                 <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+            <div class="pro">
+                <img src="chichi.jpg" alt="">
+                <div class="des">
+                    <span>Iribi</span>
+                    <h5>Multicolored beaded bag</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>£47</h4>
+                 </div>
+                 <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+            <div class="pro">
+                <img src="chichi.jpg" alt="">
+                <div class="des">
+                    <span>Iribi</span>
+                    <h5>Multicolored beaded bag</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>£47</h4>
+                 </div>
+                 <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+            <div class="pro">
+                <img src="chichi.jpg" alt="">
+                <div class="des">
+                    <span>Iribi</span>
+                    <h5>Multicolored beaded bag</h5>
+                    <div class="star">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>£47</h4>
+                 </div>
+                 <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+        </div>
+
+    </section>
+
+
+ 
+
+    <section id="sm-banner" class="section-p1">
+        <div class="banner-box">
+            <h4>crazy deals</h4>
+            <h2>buy 1 get one free</h2>
+            <span>the best bags</span>
+            <button class="white">Learn More</button>
+        </div>
+        <div class="banner-box banner-box2">
+            <h4>spring/summer</h4>
+            <h2>Upcomming season</h2>
+            <span>the best bags</span>
+            <button class="white">Learn More</button>
+        </div>
+    </section>
+    
+    <section id="banner3">
+        <div class="banner-box">
+            <h2>Seasonal Sale</h2>
+            <h3>Winter Collection</h3>
+        </div>
+        <div class="banner-box banner-box2">
+            <h2>Seasonal Sale</h2>
+            <h3>Winter Collection</h3>
+        </div>
+        <div class="banner-box banner-box3">
+            <h2>Seasonal Sale</h2>
+            <h3>Winter Collection</h3>
+        </div>
+    </section>
+
+    <section id="newsletter" class="section-p1 section-m1 ">
+        <div class="newstext">
+            <h4>Sign Up For Newsletter</h4>
+            <p>Get E-mail updates about our latest shop and <span>special offers.</span>
+            </p>
+        </div>
+        <div class="form">
+            <input type="text" placeholder="Your email address">
+            <button class="normal">Sign Up</button>
+        </div>
+    </section>
+
+    <footer class="section-p1">
+        <div class="col">
+            <img class="logo"src="bibi.png" alt="">
+            <h4>contact</h4>
+            <p><strong>Address: </strong>11 Portersfield</p>
+            <p><strong>Phone: </strong>+353899818717</p>
+            <p><strong>Hours: </strong>10:00 - 11:00, Mon - Sat</p>
+            <div class="follow">
+                <h4>Follow us</h4>
+                <div class="icon">
+                    <i class="fab fa-facebook-f"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-pinterest-p"></i>
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+
+        </div>
+        <div class="col">
+            <h4>About</h4>
+            <a href="#">About us</a>
+            <a href="#">Delivery Information</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms and Conditions</a>
+            <a href="#">Contact us</a>
+        </div>
+
+        <div class="col">
+            <h4>My Account</h4>
+            <a href="#">Sign In</a>
+            <a href="#">View Cart</a>
+            <a href="#">My Wishlist</a>
+            <a href="#">Track My Order</a>
+            <a href="#">Help</a>
+        </div>
+
+        <div class="col install">
+            <h4>Install App</h4>
+            <p>From Appstore or GooglePlay</p>
+            <div class="row">
+                <img src="koko.png" width="20%"  alt="">
+                <img src="roro.png" width="20%" alt="">
+            </div>
+            <p>Secured Payment Gateways</p>
+            <img src="money.png" alt="">
+        </div>
+
+        <div class="copyright">
+            <p>© 2021, Tech 2 etc - HTML CSS ECOMMERCE </p>
+        </div>
+    </footer>
+
+
+
+
+
+
+</body>
+
+</html> 

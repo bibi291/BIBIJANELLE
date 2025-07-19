@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Bead Website </title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link rel="stylesheet" href="style.css">
+    <script src="pipi.js" async></script>
+    <script src="bibi.js" async></script>
+    <style>
+      :root {
+        --header-height: 80px;
+      }
+  
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+  
+      body {
+        font-family: sans-serif;
+        background-color: #ffffff;
+      }
+
+     
+  
+      /* Header */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: var(--header-height);
+        background-color: #ffc7de;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+        z-index: 999;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+  
+      header img {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #4a2c2a;
+      }
+  
+      nav {
+        display: flex;
+        gap: 20px;
+      }
+  
+      nav a {
+        font-family: 'Great Vibes', cursive;
+        font-size: 1.3rem;
+        color: #4a2c2a;
+        text-decoration: none;
+        background: #fff;
+        padding: 8px 16px;
+        border-radius: 30px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: background 0.3s, color 0.3s;
+      }
+  
+      nav a:hover {
+        background: #fddde6;
+        color: #000;
+      }
+  
+      .menu-toggle {
+        display: none;
+        font-size: 1.8rem;
+        cursor: pointer;
+        color: #4a2c2a;
+      }
+  
+      .bag-icon {
+        display: none;
+        font-size: 1.6rem;
+        color: #4a2c2a;
+        margin-right: 20px;
+      }
+  
+      @media (max-width: 768px) {
+        nav {
+          position: absolute;
+          top: var(--header-height);
+          left: 0;
+          width: 100%;
+          flex-direction: column;
+          background: #ffe6f0;
+          display: none;
+          padding: 20px 0;
+        }
+  
+        nav.show {
+          display: flex;
+        }
+  
+        .menu-toggle {
+          display: block;
+        }
+  
+      }
+  
+      /* Slideshow Background */
+      .slideshow {
+        position: absolute;
+        top: var(--header-height);
+        left: 0;
+        width: 100%;
+        height: calc(100vh - var(--header-height));
+        overflow: hidden;
+        z-index: -1;
+      }
+  
+      .slideshow img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        animation: fade 12s infinite;
+      }
+  
+      .slideshow img:nth-child(1) { animation-delay: 0s; }
+      .slideshow img:nth-child(2) { animation-delay: 4s; }
+      .slideshow img:nth-child(3) { animation-delay: 8s; }
+  
+      @keyframes fade {
+        0%, 33.333%, 100% { opacity: 0; }
+        8.333%, 25% { opacity: 1; }
+      }
+  
+      main {
+        padding-top: var(--header-height);
+        text-align: center;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+      }
+  
+      .hero-title {
+        font-family: 'Great Vibes', cursive;
+        font-size: 3.5rem;
+        color: #4a2c2a;
+        animation: typing 3s steps(12), blink 0.8s step-end infinite;
+        white-space: nowrap;
+        overflow: hidden;
+        border-right: 3px solid #4a2c2a;
+        margin-bottom: 20px;
+        background-color: rgba(255, 255, 255, 0.7);
+        padding: 0 15px;
+        border-radius: 10px;
+      }
+  
+      @keyframes typing {
+        from { width: 0; }
+        to { width: 100%; }
+      }
+  
+      @keyframes blink {
+        50% { border-color: transparent; }
+      }
+  
+      .shop-now-btn {
+        font-family: 'Great Vibes', cursive;
+        background-color: #fddde6;
+        color: #4a2c2a;
+        font-size: 1.5rem;
+        padding: 10px 30px;
+        border: none;
+        border-radius: 40px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+      }
+  
+      .shop-now-btn:hover {
+        background-color: #ffc2d1;
+      }
+  
+      audio {
+        display: none;
+      }
+
+      #wishlist-count-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    #wishlist-count-wrapper .fas.fa-heart {
+      color: crimson;
+      font-size: 20px;
+    }
+
+    #wishlist-count-wrapper span {
+      position: absolute;
+      top: -8px;
+      right: -0px;
+      background: crimson;
+      color: white;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 50%;
+    }
+    </style>
+</head>
+
+<body>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Fenty Beauty Header</title>
+        <style>
+          body {
+            margin: 0;
+            font-family: 'Helvetica Neue', sans-serif;
+            background-color: #fff;
+          }
+
+      
+          .heads {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-top: 50px;
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 5px;
+      margin-top: 20px;
+    }
+       
+          .nav a {
+            text-decoration: none;
+            color: #000;
+            position: relative;
+          }
+          .nav a.sparkle::after {
+            content: '✨';
+            margin-left: 5px;
+          }
+          .nav a:hover {
+            text-decoration: underline;
+          }
+      
+        </style>
+      </head>
+
+      
+   
+      <header>
+        <img src="BJLOGO.png" alt="Bibijanelle Logo" />
+        <nav id="mobile-menu">
+          <a class= "active" href="index.html">Home</a>
+          <a href="shop.html">Shop</a>
+          <a href="blog.html">Blog</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+          <a class="bart" href="wishlist.html" id="wishlist-count-wrapper">
+            <i class="fas fa-heart"></i>
+            <span id="wishlist-count">0</span>
+          </a>
+        </nav>
+     
+             
+            
+    
+      </div>
+    
+     
+    
+        <div style="display: flex; align-items: center;">
+          <i class="fas fa-shopping-bag bag-icon"></i>
+          <i class="fas fa-bars menu-toggle" onclick="toggleMenu()"></i>
+        </div>
+      </header>
+    
+      <script>
+        // Helper function to get wishlist from local storage
+        function getWishlist() {
+          const wishlist = localStorage.getItem('wishlist');
+          return wishlist ? JSON.parse(wishlist) : [];
+        }
+        
+        // Update the count on page load
+        function updateWishlistCount() {
+          const wishlist = getWishlist();
+          document.getElementById('wishlist-count').textContent = wishlist.length;
+        }
+        
+        // Optionally, add item to wishlist (call this when someone clicks a "heart" button)
+        function addToWishlist(productId) {
+          let wishlist = getWishlist();
+          if (!wishlist.includes(productId)) {
+            wishlist.push(productId);
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            updateWishlistCount();
+          }
+        }
+        
+        // Optionally, remove item
+        function removeFromWishlist(productId) {
+          let wishlist = getWishlist().filter(id => id !== productId);
+          localStorage.setItem('wishlist', JSON.stringify(wishlist));
+          updateWishlistCount();
+        }
+        
+        // Update count on every page load
+        document.addEventListener('DOMContentLoaded', updateWishlistCount);
+        </script>
+        
+      <!-- Script for Mobile Menu -->
+      <script>
+        function toggleMenu() {
+          document.getElementById("mobile-menu").classList.toggle("show");
+        }
+      </script>
+          
+    <div class="heads">
+      CHANGE STARTS FROM YOU
+    </div>
+  
+
+    <section class="bg-gray-50 py-12 px-4 md:px-12">
+      <div class="max-w-7xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-6 text-gray-800">From Our Blog</h2>
+    
+        <!-- Search + Filters -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search blog posts..."
+            class="w-full md:w-1/2 px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
+            oninput="filterBlogs()"
+          />
+          <div class="flex flex-wrap gap-2">
+            <button onclick="filterByTag('All', event)" class="tag-btn bg-pink-500 text-white">All</button>
+            <button onclick="filterByTag('Fashion', event)" class="tag-btn">Fashion</button>
+            <button onclick="filterByTag('Accessories', event)" class="tag-btn">Accessories</button>
+            <button onclick="filterByTag('Style', event)" class="tag-btn">Style</button>
+          </div>
+        </div>
+    
+        <!-- Blog Grid -->
+        <div id="blogGrid" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+    
+          <!-- Blog Card 1 -->
+          <div class="blog-card" data-title="Beads through History" data-tags="Fashion,Accessories">
+            <div class="w-full aspect-[4/3] bg-white">
+              <img src="AD/ABLOG.png" alt=""
+                   class="w-full h-full object-contain rounded-t-xl mx-auto" />
+            </div>
+            <div class="p-5 bg-white rounded-b-2xl shadow-md">
+              <p class="text-sm text-pink-600 mb-1">June 20, 2025</p>
+              <h3 class="text-xl font-semibold text-gray-800 mb-2">Top 5 Summer Accessories</h3>
+              <p class="text-gray-600 line-clamp-3" id="blog-text-1">
+              Beadwork in Nigeria is more than decoration — it’s a powerful symbol of culture, history, and identity. From ancient kingdoms like Ife and Benin to modern-day fashion, beads have been used to show royalty, beauty, and spiritual protection. Different ethnic groups — like the Yoruba, Igbo, and Hausa — each have unique styles and meanings for their beads.
+
+Traditionally worn by kings, brides, and spiritual leaders, beads still play a big role in Nigerian celebrations today. Now, modern designers are reviving this heritage through handmade bags and jewelry that blend tradition with style.
+
+By wearing beads, you're not just accessorizing — you're honoring centuries of African artistry.
+
+              </p>
+              <button onclick="toggleReadMore(1)" class="text-pink-600 mt-3 hover:underline text-sm font-medium">Read more</button>
+            </div>
+          </div>
+    
+          <!-- Blog Card 2 -->
+          <div class="blog-card" data-title="How to Style Handmade Bags" data-tags="Style,Bags">
+            <div class="w-full aspect-[4/3] bg-white">
+              <img src="IMAGES/PURPLE.png" alt=""
+                   class="w-full h-full object-contain rounded-t-xl mx-auto" />
+            </div>
+            <div class="p-5 bg-white rounded-b-2xl shadow-md">
+              <p class="text-sm text-pink-600 mb-1">May 15, 2025</p>
+              <h3 class="text-xl font-semibold text-gray-800 mb-2">How to Style Handmade Bags</h3>
+              <p class="text-gray-600 line-clamp-3" id="blog-text-2">
+                Handmade bags are more than accessories—they're conversation starters. Here’s how to confidently integrate them into your daily and formal wardrobe.
+              </p>
+              <button onclick="toggleReadMore(2)" class="text-pink-600 mt-3 hover:underline text-sm font-medium">Read more</button>
+            </div>
+          </div>
+          <div class="blog-card" data-title="Medicine" data-tags="Fashion,Bags">
+            <div class="w-full aspect-[4/3] bg-white">
+              <img src="IMAGES/PURPLE.png" alt=""
+                   class="w-full h-full object-contain rounded-t-xl mx-auto" />
+            </div>
+            <div class="p-5 bg-white rounded-b-2xl shadow-md">
+              <p class="text-sm text-pink-600 mb-1">May 15, 2025</p>
+              <h3 class="text-xl font-semibold text-gray-800 mb-2">How to Style Handmade Bags</h3>
+              <p class="text-gray-600 line-clamp-3" id="blog-text-2">
+                Handmade bags are more than accessories—they're conversation starters. Here’s how to confidently integrate them into your daily and formal wardrobe.
+              </p>
+              <button onclick="toggleReadMore(2)" class="text-pink-600 mt-3 hover:underline text-sm font-medium">Read more</button>
+            </div>
+          </div>
+
+          <div class="blog-card" data-title="How to Style Handmade Bags" data-tags="Style,Bags">
+            <div class="w-full aspect-[4/3] bg-white">
+              <img src="IMAGES/PURPLE.png" alt=""
+                   class="w-full h-full object-contain rounded-t-xl mx-auto" />
+            </div>
+            <div class="p-5 bg-white rounded-b-2xl shadow-md">
+              <p class="text-sm text-pink-600 mb-1">May 15, 2025</p>
+              <h3 class="text-xl font-semibold text-gray-800 mb-2">Medicine</h3>
+              <p class="text-gray-600 line-clamp-3" id="blog-text-2">
+                Handmade bags are more than accessories—they're conversation starters. Here’s how to confidently integrate them into your daily and formal wardrobe.
+              </p>
+              <button onclick="toggleReadMore(2)" class="text-pink-600 mt-3 hover:underline text-sm font-medium">Read more</button>
+            </div>
+          </div>
+          <!-- Add more blog cards if needed -->
+    
+        </div>
+      </div>
+    </section>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/line-clamp@0.4.0"></script>
+    <script>
+      tailwind.config = {
+        theme: { extend: {} },
+        plugins: [tailwindLineClamp],
+      };
+    </script>
+    
+    <!-- JavaScript -->
+    <script>
+      function toggleReadMore(id) {
+        const text = document.getElementById(`blog-text-${id}`);
+        text.classList.toggle('line-clamp-3');
+      }
+    
+      function filterBlogs() {
+        const query = document.getElementById("searchInput").value.toLowerCase();
+        const blogs = document.querySelectorAll(".blog-card");
+    
+        blogs.forEach(card => {
+          const title = card.dataset.title.toLowerCase();
+          const tags = card.dataset.tags.toLowerCase();
+          card.style.display = (title.includes(query) || tags.includes(query)) ? "block" : "none";
+        });
+      }
+    
+      function filterByTag(tag, event) {
+        const blogs = document.querySelectorAll(".blog-card");
+        const buttons = document.querySelectorAll(".tag-btn");
+    
+        buttons.forEach(btn => btn.classList.remove("bg-pink-500", "text-white"));
+        event.target.classList.add("bg-pink-500", "text-white");
+    
+        blogs.forEach(card => {
+          const tags = card.dataset.tags;
+          card.style.display = (tag === 'All' || tags.includes(tag)) ? "block" : "none";
+        });
+      }
+    </script>
+    
+    <!-- Custom Styles -->
+    <style>
+      .tag-btn {
+        @apply px-4 py-1 border border-pink-300 rounded-full text-sm text-pink-600 hover:bg-pink-100 transition-all;
+      }
+    </style>
+
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shop Our IG</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+
+      background-color: #f7f7f7;
+    }
+
+    h2 {
+      color: #6e4c7d;
+      margin-bottom: 20px;
+    }
+
+    .ig-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+
+      overflow: hidden;
+    }
+
+    .ig-grid img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    .ig-grid a:hover img {
+      transform: scale(1.05);
+    }
+
+    .extra-images {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .load-more-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 24px;
+      background-color: #6e4c7d;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .load-more-btn:hover {
+      background-color: #5a3b6a;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>SHOP OUR IG</h2>
+
+  <style>
+  .ig-grid,
+  .extra-images {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .extra-images {
+    display: none; /* Hidden by default */
+  }
+
+  .ig-grid a img,
+  .extra-images a img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+  }
+
+  .load-more-btn {
+    padding: 8px 16px;
+    font-size: 18px;
+    cursor: pointer;
+    border: none;
+    background-color: #000;
+    color: white;
+    border-radius: 5px;
+  }
+</style>
+
+<div class="ig-grid">
+  <!-- Always visible -->
+  <a href="https://www.instagram.com/yourpost1" target="_blank">
+    <img src="AD/28.png" alt="Product 1">
+  </a>
+  <a href="https://www.instagram.com/yourpost2" target="_blank">
+    <img src="AD/29.png" alt="Product 2">
+  </a>
+  <a href="https://www.instagram.com/yourpost3" target="_blank">
+    <img src="AD/30.png" alt="Product 3">
+  </a>
+  <a href="https://www.instagram.com/yourpost4" target="_blank">
+    <img src="AD/36.png" alt="Product 4">
+  </a>
+  <a href="https://www.instagram.com/yourpost5" target="_blank">
+    <img src="AD/32.png" alt="Product 5">
+  </a>
+</div>
+
+<!-- Hidden initially -->
+<div class="extra-images">
+  <a href="https://www.instagram.com/yourpost6" target="_blank">
+    <img src="AD/33.png" alt="Product 6">
+  </a>
+  <a href="https://www.instagram.com/yourpost7" target="_blank">
+    <img src="AD/34.png" alt="Product 7">
+  </a>
+  <a href="https://www.instagram.com/yourpost8" target="_blank">
+    <img src="AD/35.png" alt="Product 8">
+  </a>
+  <a href="https://www.instagram.com/yourpost9" target="_blank">
+    <img src="AD/36.png" alt="Product 9">
+  </a>
+  <a href="https://www.instagram.com/yourpost10" target="_blank">
+    <img src="AD/37.png" alt="Product 10">
+  </a>
+  <a href="https://www.instagram.com/yourpost11" target="_blank">
+    <img src="AD/38.png" alt="Product 11">
+  </a>
+  <a href="https://www.instagram.com/yourpost12" target="_blank">
+    <img src="AD/39.png" alt="Product 12">
+  </a>
+  <a href="https://www.instagram.com/yourpost13" target="_blank">
+    <img src="AD/40.png" alt="Product 13">
+  </a>
+</div>
+
+<button class="load-more-btn" onclick="toggleImages()">+</button>
+
+<script>
+  function toggleImages() {
+    const extras = document.querySelector('.extra-images');
+    const button = document.querySelector('.load-more-btn');
+    if (extras.style.display === 'grid') {
+      extras.style.display = 'none';
+      button.textContent = '+';
+    } else {
+      extras.style.display = 'grid';
+      button.textContent = '-';
+    }
+  }
+</script>
+
+
+</body>
+</html>
+<!-- === Start of Magazine Section === -->
+<style>
+  .magazine-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+  }
+
+  .magazine-frame {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    overflow: hidden;
+    max-width: 300px;
+    background-color: white;
+    transition: transform 0.2s;
+  }
+
+  .magazine-frame:hover {
+    transform: scale(1.02);
+  }
+
+  .magazine-cover {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .magazine-content {
+    padding: 15px;
+    text-align: center;
+  }
+
+  .magazine-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #333;
+  }
+
+  .magazine-date {
+    font-size: 0.9rem;
+    color: #777;
+    margin: 8px 0;
+  }
+
+  .read-button {
+    background-color: #e91e63;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+    transition: background 0.3s;
+  }
+
+  .read-button:hover {
+    background-color: #c2185b;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #333;
+    margin: 40px 0 20px;
+  }
+</style>
+
+<h2 class="section-title">📰 Weekly Magazine</h2>
+
+<div class="magazine-grid">
+  <!-- Issue 1 -->
+  <div class="magazine-frame">
+    <img class="magazine-cover" src="tgg.png" alt="Issue 1 Cover">
+    <div class="magazine-content">
+      <div class="magazine-title">Issue #1 – Launch Edition</div>
+      <div class="magazine-date">June 29, 2025</div>
+      <a href="magazines/issue1.pdf" class="read-button" target="_blank">Read Issue</a>
+    </div>
+  </div>
+
+  <!-- Issue 2 -->
+  <div class="magazine-frame">
+    <img class="magazine-cover" src="pu.jpg" alt="Issue 2 Cover">
+    <div class="magazine-content">
+      <div class="magazine-title">Issue #2 – Summer Picks</div>
+      <div class="magazine-date">July 6, 2025</div>
+      <a href="https://heyzine.com/flip-book/f33c28646f.html" class="read-button" target="_blank">Read Issue</a>
+    </div>
+  </div>
+
+  <!-- Add more issues as needed -->
+</div>
+<!-- === End of Magazine Section === -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Video Slider</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>BEST SELLERS</h2>
+  <div class="slider-container">
+    <button class="arrow left" onclick="scrollSlider(-1)">&#10094;</button>
+    
+    <div class="video-slider" id="videoSlider">
+      <div class="video-card">
+        <video src="VID.mp4" controls></video>
+      </div>
+      <div class="video-card">
+        <video src="dance.mp4" controls></video>
+      </div>
+     <div class="video-card">
+        <video src="AA.mp4" controls></video>
+      </div>
+      <div class="video-card">
+        <video src="BB.mp4" controls></video>
+      </div>
+      <div class="video-card">
+        <video src="CHAKE.mp4" controls></video>
+      </div>
+      <div class="video-card">
+        <video src="CHIKE.mp4" controls></video>
+      </div>
+      <div class="video-card">
+        <video src="RAKE.mp4" controls></video>
+      </div>
+    </div>
+    
+    <button class="arrow right" onclick="scrollSlider(1)">&#10095;</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+<STyle>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #fdf6f9;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  h2 {
+    color: #8b4a90;
+    margin-bottom: 30px;
+  }
+  
+  .slider-container {
+    position: relative;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 0 40px;
+  }
+  
+  .video-slider {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 20px;
+  }
+  
+  .video-card {
+    flex: 0 0 auto;
+    width: 300px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    background-color: #fff;
+  }
+  
+  .video-card video {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    z-index: 5;
+  }
+  
+  .arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    background: none;
+    border: none;
+    color: #8b4a90;
+    cursor: pointer;
+    z-index: 1;
+  }
+  
+  .arrow.left {
+    left: 10px;
+  }
+  
+  .arrow.right {
+    right: 10px;
+  }
+</STyle>
+
+
+<SCript>
+  function scrollSlider(direction) {
+    const slider = document.getElementById('videoSlider');
+    const scrollAmount = 320; // width of video + margin
+    slider.scrollBy({
+      left: direction * scrollAmount,
+      behavior: 'smooth'
+    });
+  }
+</SCript>
+
+
+
+
+
+
+
+    <section id="newsletter" class="section-p1 section-m1">
+      <div class="newsletter-container">
+        <div class="newstext">
+          <h4>Sign Up for Our Newsletter</h4>
+          <p>Get email updates about our latest shop items and <span>exclusive offers</span>.</p>
+        </div>
+    
+        <div id="mc_embed_signup">
+          <form action="https://iribi.us17.list-manage.com/subscribe/post?u=36fe9b71f99e31aa10c0df309&amp;id=cf5929ee7a&amp;f_id=00e33de3f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+            <div id="mc_embed_signup_scroll">
+              <input type="email" value="" name="EMAIL" class="email-input" id="mce-EMAIL" placeholder="Enter your email" required>
+              <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="subscribe-btn">
+            </div>
+          </form>
+        </div>
+      </div>
+    
+      <!-- Mailchimp validation script -->
+      <script src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js" type="text/javascript"></script>
+      <script>
+        (function ($) {
+          window.fnames = new Array(); 
+          window.ftypes = new Array();
+          fnames[0] = 'EMAIL'; ftypes[0] = 'email';
+        })(jQuery);
+        var $mcj = jQuery.noConflict(true);
+      </script>
+    </section>
+
+    <footer class="section-p1">
+        <div class="col">
+            <img class="logo"src="bibi.png" alt="">
+            <h4>contact</h4>
+            <p><strong>Address: </strong>11 Portersfield</p>
+            <p><strong>Phone: </strong>+353899818717</p>
+            <p><strong>Hours: </strong>10:00 - 11:00, Mon - Sat</p>
+            <div class="follow">
+                <h4>Follow us</h4>
+                <div class="icon">
+                    <i class="fab fa-facebook-f"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i href="https://www.instagram.com/yourpost6" class="fab fa-instagram"></i>
+                    <i class="fab fa-pinterest-p"></i>
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+
+        </div>
+        <div class="col">
+            <h4>About</h4>
+            <a href="#">About us</a>
+            <a href="#">Delivery Information</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms and Conditions</a>
+            <a href="#">Contact us</a>
+        </div>
+
+        <div class="col">
+            <h4>My Account</h4>
+            <a href="#">Sign In</a>
+            <a href="#">View Cart</a>
+            <a href="#">My Wishlist</a>
+            <a href="#">Track My Order</a>
+            <a href="#">Help</a>
+        </div>
+
+        <div class="col install">
+            <h4>Install App</h4>
+            <p>From Appstore or GooglePlay</p>
+            <div class="row">
+                <img src="koko.png" width="20%"  alt="">
+                <img src="roro.png" width="20%"  alt="">
+            </div>
+            <p>Secured Payment Gateways</p>
+            <img src="money.png" alt="">
+        </div>
+
+        <div class="copyright">
+            <p>© 2021, Tech 2 etc - HTML CSS ECOMMERCE </p>
+        </div>
+    </footer>
+
+
+
+
+
+
+</body>
+
+</html> 
+

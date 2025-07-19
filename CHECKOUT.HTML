@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Bead Website</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+  <link rel="stylesheet" href="style.css">
+  <script src="pipi.js" async></script>
+  <script src="bibi.js" async></script>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Helvetica Neue', sans-serif;
+      background-color: #fff;
+    }
+    body {
+      padding-top: 80px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: #000;
+      position: relative;
+    }
+    .nav a.sparkle::after {
+      content: '✨';
+      margin-left: 5px;
+    }
+    .nav a:hover {
+      text-decoration: underline;
+    }
+    .cart { list-style: none; }
+    .checkout-container {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      gap: 20px;
+      padding: 20px;
+      flex-wrap: wrap;
+    }
+    .form, .summary { width: 48%; }
+    input, select {
+      display: block;
+      margin-bottom: 10px;
+      width: 100%;
+      padding: 8px;
+    }
+    .summary {
+      border: 1px solid #ccc;
+      padding: 20px;
+    }
+    .checkout-item {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+    }
+    .checkout-total {
+      font-size: 18px;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    .pay-button {
+      margin-top: 20px;
+      padding: 10px 15px;
+      background: #000;
+      color: white;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+    @media (max-width: 768px) {
+      .form, .summary { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <ul id="navbar"> 
+        <li><a href="index.html">home</a></li>
+        <li><a href="shop.html">shop</a></li>
+        <li><a href="blog.html">blog</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a  href="contact.html">contact</a></li>
+        <li class="cart" ><a class="active" href="CHECKOUT.HTML"><i class="fas fa-shopping-bag"></i><span>0</span></a></li>
+                  <li class="bart"><a href="wishlist.html"><i class="fas fa-heart"></i><span id="wishlist-count">0</span></a></li>
+                 
+                  <a href="#" id="close"><i class="fas fa-times"></i></a>
+
+    </ul>
+
+
+    <div id="mobile">
+
+        <i id="bar" class="fas fa-outdent"></i>
+    </div>
+</div>
+      
+
+  <section id="page-header" class="about-header">
+    <h2>#Let's talk</h2>
+    <p>live a message</p>
+  </section>
+
+  <main class="checkout-container">
+    <form class="form" id="checkoutForm" action="https://formsubmit.co/bibiirejeanelle@gmail.com" method="POST">
+      <h2>Contact</h2>
+      <input type="email" name="email" placeholder="Email" required>
+
+      <h2>Delivery</h2>
+      <input type="text" name="first_name" placeholder="First Name" required>
+      <input type="text" name="last_name" placeholder="Last Name" required>
+      <input type="text" name="address" placeholder="Address" required>
+      <input type="text" name="city" placeholder="City" required>
+      <input type="text" name="postal_code" placeholder="Postal Code" required>
+      <input type="text" name="phone" placeholder="Phone" required>
+
+      <input type="hidden" name="order_details" id="orderDetailsInput">
+      <input type="hidden" name="order_total" id="orderTotalInput">
+ 
+
+      <button type="submit" class="pay-button">Pay Now</button>
+    </form>
+
+    <div class="summary">
+      <h2>Order Summary</h2>
+      <div id="checkoutProducts"></div>
+      <div class="checkout-total">
+        Total: ₦<span id="checkoutTotal">0</span>
+      </div>
+      <button class="pay-button" style="background: crimson; margin-top: 10px;" onclick="clearCart()">Clear All</button>
+    </div>
+  </main>
+
+  <script>
+    function loadCheckout() {
+      const cartItems = JSON.parse(localStorage.getItem("productsinCart")) || {};
+      const totalCost = parseInt(localStorage.getItem("totalCost")) || 0;
+      const container = document.getElementById("checkoutProducts");
+      const orderDetailsInput = document.getElementById("orderDetailsInput");
+      const orderTotalInput = document.getElementById("orderTotalInput");
+      const checkoutTotal = document.getElementById("checkoutTotal");
+
+      let summaryText = "";
+      container.innerHTML = "";
+
+      Object.values(cartItems).forEach(item => {
+        const subtotal = item.inCart * item.price;
+        container.innerHTML += `
+          <div class="checkout-item">
+            <img src="images/${item.tag}.png" alt="${item.name}" style="width: 80px; height: 80px; object-fit: cover; border: 1px solid #ccc;">
+            <strong>${item.name}</strong><br>
+            Quantity: ${item.inCart}<br>
+            Price: ₦${item.price}<br>
+            Subtotal: ₦${subtotal}<br>
+            <button onclick="removeItem('${item.tag}')" style="background-color: #f44336; color: white; padding: 5px 10px; border: none; cursor: pointer; margin-top: 5px;">Cancel</button>
+          </div>
+        `;
+        summaryText += `${item.name} (x${item.inCart}) - ₦${subtotal.toLocaleString()}\n`;
+      });
+
+      checkoutTotal.textContent = totalCost.toLocaleString();
+      orderDetailsInput.value = summaryText;
+      orderTotalInput.value = `₦${totalCost.toLocaleString()}`;
+    }
+
+    function clearCart() {
+      if (confirm("Are you sure you want to clear your entire cart?")) {
+        localStorage.removeItem("productsinCart");
+        localStorage.removeItem("cartNumbers");
+        localStorage.removeItem("totalCost");
+        loadCheckout();
+        document.getElementById("checkoutTotal").textContent = "0";
+      }
+    }
+
+    function removeItem(tag) {
+      let cartItems = JSON.parse(localStorage.getItem("productsinCart"));
+      let totalCost = parseInt(localStorage.getItem("totalCost")) || 0;
+      let cartNumbers = parseInt(localStorage.getItem("cartNumbers")) || 0;
+
+      if (cartItems[tag]) {
+        totalCost -= cartItems[tag].price * cartItems[tag].inCart;
+        cartNumbers -= cartItems[tag].inCart;
+        delete cartItems[tag];
+
+        localStorage.setItem("productsinCart", JSON.stringify(cartItems));
+        localStorage.setItem("totalCost", totalCost);
+        localStorage.setItem("cartNumbers", cartNumbers);
+
+        loadCheckout();
+        document.getElementById("checkoutTotal").textContent = totalCost;
+      }
+    }
+
+    loadCheckout();
+
+  document.getElementById("checkoutForm").addEventListener("submit", function () {
+    // Clear cart after submitting
+    localStorage.removeItem("productsinCart");
+    localStorage.removeItem("cartNumbers");
+    localStorage.removeItem("totalCost");
+  });
+
+
+  
+  </script>
+
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+document.querySelector("#ecwid_html")
+document.querySelector("head")
+document.querySelector("#ecwid_body")
+document.querySelector("#ecwid-products > div.ec-storefront-v2.ec-size.ecwid-no-touch.ecwid-supports-cssanimations.ecwid-responsive.ecwid-lte-400px.ecwid-lte-480px.ecwid-lte-600px.ecwid-lte-768px.ec-size--xxs > div > div > div:nth-child(2) > div > div:nth-child(2) > div > div.ec-store.ec-store__cart-page > div > div.ec-cart.notranslate > div.ec-cart__sidebar > div > table > tbody:nth-child(2) > tr > td.ec-cart-summary__cell.ec-cart-summary__title")
+document.querySelector("#ecwid_html")
