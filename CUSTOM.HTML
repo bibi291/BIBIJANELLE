@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Custom Jewelry Builder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      padding: 20px;
+    }
+    .builder-container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    input, select, button {
+      margin: 8px 0;
+      padding: 8px;
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .bead-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .bead-row img {
+      width: 30px;
+      height: 30px;
+    }
+    .preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      padding: 10px;
+      background: #fff;
+      border: 1px solid #ddd;
+      margin-bottom: 20px;
+      min-height: 50px;
+    }
+    .preview img {
+      width: 30px;
+      height: 30px;
+    }
+    .body-preview {
+      position: relative;
+      height: 250px;
+      background: #e0e0e0;
+      border-radius: 12px;
+      overflow: hidden;
+      text-align: center;
+    }
+    .body-preview img.body {
+      max-width: 100%;
+      height: auto;
+    }
+    .jewelry-overlay {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      gap: 3px;
+    }
+    .jewelry-overlay img {
+      width: 25px;
+      height: 25px;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+</head>
+<body>
+  <div class="builder-container">
+    <h1>Design Your Custom Jewelry</h1>
+
+    <label for="designName">Design Name:</label>
+    <input type="text" id="designName" placeholder="My Elegant Bracelet" />
+
+    <label for="jewelryType">Choose Type:</label>
+    <select id="jewelryType" onchange="updateBodyPreview()">
+      <option value="bracelet">Bracelet</option>
+      <option value="necklace">Necklace</option>
+    </select>
+
+    <div id="beadsArea"></div>
+    <button onclick="addBeadRow()">+ Add Bead</button>
+
+    <h3>Flat Preview</h3>
+    <div id="flatPreview" class="preview"></div>
+
+    <h4>Preview on Body</h4>
+    <label for="skinTone">Choose Skin Tone:</label>
+    <select id="skinTone" onchange="updateBodyPreview()">
+      <option value="light">Light</option>
+      <option value="medium">Medium</option>
+      <option value="dark">Dark</option>
+    </select>
+    <div id="bodyPreview" class="body-preview">
+      <img id="bodyImage" class="body" src="blackhand.jpeg" alt="Body Preview">
+      <div id="jewelryOverlay" class="jewelry-overlay"></div>
+    </div>
+
+    <button onclick="saveDraft()">💾 Save Draft</button>
+    <button onclick="loadDraft()">📂 Load Draft</button>
+
+    <h3>Submit Your Design</h3>
+    <input type="email" id="userEmail" placeholder="Your Email" />
+    <button onclick="submitDesign()">Send to My Email</button>
+  </div>
+
+  <script>
+    emailjs.init("your_user_id"); // replace with your EmailJS user ID
+
+    const beadImages = {
+      red: "RED.PNG",
+      blue: "https://via.placeholder.com/30/0000FF/FFFFFF?text=B",
+      green: "https://via.placeholder.com/30/00FF00/FFFFFF?text=G"
+    };
+
+    function addBeadRow(bead = {}) {
+      const row = document.createElement("div");
+      row.className = "bead-row";
+
+      row.innerHTML = `
+        <select class="bead-type">
+          <option value="round">Round</option>
+          <option value="flower">Flower</option>
+          <option value="heart">Heart</option>
+        </select>
+        <select class="bead-color">
+          <option value="red">Red</option>
+          <option value="blue">Blue</option>
+          <option value="green">Green</option>
+        </select>
+        <input type="number" class="bead-qty" min="1" value="${bead.qty || 1}" />
+        <button onclick="this.parentElement.remove(); updatePreviews();">Remove</button>
+      `;
+
+      document.getElementById("beadsArea").appendChild(row);
+      row.querySelectorAll("select, input").forEach(el => el.addEventListener("change", updatePreviews));
+
+      if (bead.color) row.querySelector(".bead-color").value = bead.color;
+      if (bead.type) row.querySelector(".bead-type").value = bead.type;
+
+      updatePreviews();
+    }
+
+    function updatePreviews() {
+      const flatPreview = document.getElementById("flatPreview");
+      const overlay = document.getElementById("jewelryOverlay");
+      flatPreview.innerHTML = "";
+      overlay.innerHTML = "";
+
+      document.querySelectorAll(".bead-row").forEach(row => {
+        const color = row.querySelector(".bead-color").value;
+        const qty = parseInt(row.querySelector(".bead-qty").value) || 1;
+        for (let i = 0; i < qty; i++) {
+          const img = document.createElement("img");
+          img.src = beadImages[color];
+          flatPreview.appendChild(img);
+
+          const clone = img.cloneNode();
+          overlay.appendChild(clone);
+        }
+      });
+    }
+
+    function updateBodyPreview() {
+      const type = document.getElementById("jewelryType").value;
+      const tone = document.getElementById("skinTone").value;
+      const img = document.getElementById("bodyImage");
+
+      img.src = `skin/${type}-${tone}.jpeg`;
+    }
+
+    function saveDraft() {
+      const draft = {
+        name: document.getElementById("designName").value,
+        type: document.getElementById("jewelryType").value,
+        tone: document.getElementById("skinTone").value,
+        email: document.getElementById("userEmail").value,
+        beads: []
+      };
+
+      document.querySelectorAll(".bead-row").forEach(row => {
+        draft.beads.push({
+          type: row.querySelector(".bead-type").value,
+          color: row.querySelector(".bead-color").value,
+          qty: parseInt(row.querySelector(".bead-qty").value)
+        });
+      });
+
+      localStorage.setItem("jewelryDraft", JSON.stringify(draft));
+      alert("Draft saved!");
+    }
+
+    function loadDraft() {
+      const data = JSON.parse(localStorage.getItem("jewelryDraft"));
+      if (!data) return alert("No saved draft.");
+
+      document.getElementById("designName").value = data.name;
+      document.getElementById("jewelryType").value = data.type;
+      document.getElementById("skinTone").value = data.tone;
+      document.getElementById("userEmail").value = data.email;
+      document.getElementById("beadsArea").innerHTML = "";
+
+      data.beads.forEach(bead => addBeadRow(bead));
+      updateBodyPreview();
+    }
+
+    function submitDesign() {
+      const email = document.getElementById("userEmail").value;
+      if (!email) return alert("Please enter your email.");
+
+      html2canvas(document.getElementById("flatPreview")).then(canvas => {
+        const imageData = canvas.toDataURL("image/png");
+
+        const params = {
+          to_email: email,
+          design_name: document.getElementById("designName").value,
+          jewelry_type: document.getElementById("jewelryType").value,
+          skin_tone: document.getElementById("skinTone").value,
+          image_data: imageData
+        };
+
+        emailjs.send("your_service_id", "your_template_id", params)
+          .then(() => alert("Email sent!"))
+          .catch(err => alert("Error: " + err.text));
+      });
+    }
+
+    window.onload = () => {
+      addBeadRow();
+      updateBodyPreview();
+    };
+  </script>
+</body>
+</html>
