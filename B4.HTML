@@ -706,6 +706,68 @@ function saveComments() {
       background-color: #f5f5f5;
       border-radius: 6px;
     }
+
+     .product {
+      position: relative;
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease;
+    }
+
+    .product:hover {
+      transform: translateY(-5px);
+    }
+
+    .product img {
+
+      transition: opacity 0.4s ease;
+    }
+
+    .product .img-hover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .product:hover .img-hover {
+      opacity: 1;
+    }
+
+        .status-flag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: crimson;
+  color: white;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 4px;
+  z-index: 10;
+  text-transform: uppercase;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+.status-flag.popular {
+  background-color: orange;
+}
+
+.status-flag.limited {
+  background-color: purple;
+}
+
+.product-card {
+  position: relative; /* Important so the flag stays in place */
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
   </style>
   
 
@@ -714,70 +776,57 @@ function saveComments() {
     <h2>Featured Products</h2>
     <p>Summer Collection</p>
     <div class="pro-container">
-        <div class="pro">
-            <img src="chichi.jpg" alt="">
+             <div class="pro" data-color="NECKLACE" data-price="20.99"  onclick="window.location.href='A1.HTML';" >
+                <DIv class="product">
+                 <div class="status-flag new">🔥 New</div> 
+                <img src="IMAGES/A1.png" alt="">
+                <img class="img-hover" src="bobo.jpeg" alt="Product Side">
+                <div class="des">
+                    <span>classic</span>
+                    <h5> Midnight Onyx Necklace</h5>
+                    <h4>£47</h4>
+                 </div>
+                 <a href="#"><i class="fas fa-shopping-cart"></i></a>
+                </DIv>
+            </div>
+
+            <div class="pro" data-color="NECKLACE" data-price="20.99"  onclick="window.location.href='A2.html';" >
+              <DIv class="product">
+              <img src="IMAGES/A2.png" alt="">
+              <img class="img-hover" src="bobo.jpeg" alt="Product Side">
+              <div class="des">
+                  <span>red</span>
+                  <h5>Sky Whisper Necklace</h5>
+                  <h4>£47</h4>
+               </div>
+               <a href="#"><i class="fas fa-shopping-cart"></i></a>
+              </DIv>
+          </div>
+         
+          <div class="pro" data-color="NECKLACE" data-price="20.99"  onclick="window.location.href='A3.html';" >
+            <DIv class="product">
+            <img src="IMAGES/A3.png" alt="">
+            <img class="img-hover" src="bobo.jpeg" alt="Product Side">
             <div class="des">
-                <span>Iribi</span>
-                <h5>Multicolored beaded bag</h5>
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
+                <span>pretty</span>
+                <h5>Crystal Garden Necklace Set</h5>
                 <h4>£47</h4>
              </div>
              <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            </DIv>
         </div>
-        <div class="pro">
-            <img src="chichi.jpg" alt="">
-            <div class="des">
-                <span>Iribi</span>
-                <h5>Multicolored beaded bag</h5>
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <h4>£47</h4>
-             </div>
-             <a href="#"><i class="fas fa-shopping-cart"></i></a>
-        </div>
-        <div class="pro">
-            <img src="chichi.jpg" alt="">
-            <div class="des">
-                <span>Iribi</span>
-                <h5>Multicolored beaded bag</h5>
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <h4>£47</h4>
-             </div>
-             <a href="#"><i class="fas fa-shopping-cart"></i></a>
-        </div>
-        <div class="pro">
-            <img src="chichi.jpg" alt="">
-            <div class="des">
-                <span>Iribi</span>
-                <h5>Multicolored beaded bag</h5>
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <h4>£47</h4>
-             </div>
-             <a href="#"><i class="fas fa-shopping-cart"></i></a>
-        </div>
+        <div class="pro" data-color="NECKLACE" data-price="20.99"  onclick="window.location.href='A4.html';" >
+          <DIv class="product">
+          <img src="IMAGES/A4.png" alt="">
+          <img class="img-hover" src="bobo.jpeg" alt="Product Side">
+          <div class="des">
+              <span>elegant</span>
+              <h5>Silver Teardrop Necklace Set</h5>
+              <h4>£47</h4>
+           </div>
+           <a href="#"><i class="fas fa-shopping-cart"></i></a>
+          </DIv>
+      </div>
        
     </div>
 
