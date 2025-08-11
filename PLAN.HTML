@@ -1,0 +1,176 @@
+import React, { useState, useEffect } from "react";
+
+export default function App() {
+  const [journalEntry, setJournalEntry] = useState("");
+  const [savedEntries, setSavedEntries] = useState([]);
+  const [vocabList, setVocabList] = useState([
+    { french: "Bonjour", english: "Hello" },
+    { french: "Merci", english: "Thank you" },
+    { french: "Pomme", english: "Apple" },
+  ]);
+  const [quizIndex, setQuizIndex] = useState(0);
+  const [quizAnswer, setQuizAnswer] = useState("");
+  const [quizScore, setQuizScore] = useState(0);
+  const [verb, setVerb] = useState("");
+  const [conjugations, setConjugations] = useState([]);
+
+  // Load saved journal entries from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("frenchJournal");
+    if (saved) {
+      setSavedEntries(JSON.parse(saved));
+    }
+  }, []);
+
+  // Save entries to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("frenchJournal", JSON.stringify(savedEntries));
+  }, [savedEntries]);
+
+  const saveEntry = () => {
+    if (journalEntry.trim() === "") return;
+    const newEntries = [
+      ...savedEntries,
+      { text: journalEntry, date: new Date().toLocaleDateString() },
+    ];
+    setSavedEntries(newEntries);
+    setJournalEntry("");
+  };
+
+  const deleteEntry = (index) => {
+    const newEntries = savedEntries.filter((_, i) => i !== index);
+    setSavedEntries(newEntries);
+  };
+
+  const checkQuizAnswer = () => {
+    const correct = vocabList[quizIndex].english.toLowerCase();
+    if (quizAnswer.trim().toLowerCase() === correct) {
+      setQuizScore(quizScore + 1);
+    }
+    setQuizIndex((quizIndex + 1) % vocabList.length);
+    setQuizAnswer("");
+  };
+
+  const conjugateVerb = () => {
+    if (!verb.trim()) return;
+    // Simple present tense for regular verbs
+    const stem = verb.slice(0, -2);
+    if (verb.endsWith("er")) {
+      setConjugations([
+        `${stem}e`,
+        `${stem}es`,
+        `${stem}e`,
+        `${stem}ons`,
+        `${stem}ez`,
+        `${stem}ent`,
+      ]);
+    } else if (verb.endsWith("ir")) {
+      setConjugations([
+        `${stem}is`,
+        `${stem}is`,
+        `${stem}it`,
+        `${stem}issons`,
+        `${stem}issez`,
+        `${stem}issent`,
+      ]);
+    } else if (verb.endsWith("re")) {
+      setConjugations([
+        `${stem}s`,
+        `${stem}s`,
+        `${stem}`,
+        `${stem}ons`,
+        `${stem}ez`,
+        `${stem}ent`,
+      ]);
+    } else {
+      setConjugations(["(irregular verb — not supported yet)"]);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-blue-50 p-6">
+      <h1 className="text-3xl font-bold text-center mb-4">French Helper</h1>
+
+      {/* Journal Section */}
+      <section className="bg-white p-4 rounded shadow mb-6">
+        <h2 className="text-xl font-semibold mb-2">Le Journal</h2>
+        <textarea
+          value={journalEntry}
+          onChange={(e) => setJournalEntry(e.target.value)}
+          placeholder="Écris ton journal ici..."
+          className="w-full p-2 border rounded mb-2"
+          rows="4"
+        />
+        <button
+          onClick={saveEntry}
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Sauvegarder
+        </button>
+        <ul className="mt-4">
+          {savedEntries.map((entry, index) => (
+            <li key={index} className="border-b py-2">
+              <p className="text-sm text-gray-600">{entry.date}</p>
+              <p>{entry.text}</p>
+              <button
+                onClick={() => deleteEntry(index)}
+                className="text-red-500 text-sm"
+              >
+                Supprimer
+              </button>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Vocabulary Quiz */}
+      <section className="bg-white p-4 rounded shadow mb-6">
+        <h2 className="text-xl font-semibold mb-2">Vocab Quiz</h2>
+        <p>
+          What is "{vocabList[quizIndex].french}" in English?
+        </p>
+        <input
+          value={quizAnswer}
+          onChange={(e) => setQuizAnswer(e.target.value)}
+          className="border p-2 rounded mr-2"
+        />
+        <button
+          onClick={checkQuizAnswer}
+          className="bg-green-500 text-white px-4 py-2 rounded"
+        >
+          Submit
+        </button>
+        <p className="mt-2">Score: {quizScore}</p>
+      </section>
+
+      {/* Verb Conjugator */}
+      <section className="bg-white p-4 rounded shadow">
+        <h2 className="text-xl font-semibold mb-2">Verb Conjugator</h2>
+        <input
+          value={verb}
+          onChange={(e) => setVerb(e.target.value)}
+          placeholder="Enter a verb (e.g., parler)"
+          className="border p-2 rounded mr-2"
+        />
+        <button
+          onClick={conjugateVerb}
+          className="bg-purple-500 text-white px-4 py-2 rounded"
+        >
+          Conjugate
+        </button>
+        <ul className="mt-4">
+          {conjugations.length > 0 && (
+            <>
+              <li>Je {conjugations[0]}</li>
+              <li>Tu {conjugations[1]}</li>
+              <li>Il/Elle {conjugations[2]}</li>
+              <li>Nous {conjugations[3]}</li>
+              <li>Vous {conjugations[4]}</li>
+              <li>Ils/Elles {conjugations[5]}</li>
+            </>
+          )}
+        </ul>
+      </section>
+    </div>
+  );
+}
