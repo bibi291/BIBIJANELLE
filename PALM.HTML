@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Palm Fresh Nigeria</title>
+<style>
+/* ====== RESET ====== */
+* {
+  margin: 0; padding: 0; box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  scroll-behavior: smooth;
+}
+
+/* ====== HEADER ====== */
+header {
+  background: #c0392b;
+  color: #fff;
+  padding: 20px 0;
+  position: fixed;
+  top: 0; left: 0; width: 100%;
+  z-index: 1000;
+}
+
+header nav {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+header nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+header nav a:hover {
+  text-decoration: underline;
+}
+
+/* ====== SECTION ====== */
+section {
+  padding: 80px 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+#home {
+  background: url('https://images.unsplash.com/photo-1633530026922-0e6e35b9a39e') no-repeat center/cover;
+  color: white;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+#home h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+#home p {
+  font-size: 1.3rem;
+  max-width: 600px;
+  margin: auto;
+  background: rgba(0,0,0,0.4);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* About */
+#about {
+  background: #fdf5e6;
+  border-radius: 12px;
+}
+
+/* Products */
+#products {
+  background: #fff5f5;
+}
+
+.product-card {
+  display: inline-block;
+  width: 280px;
+  margin: 15px;
+  padding: 15px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.product-card img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.product-card h3 {
+  margin: 10px 0 5px;
+  color: #c0392b;
+}
+
+/* Contact */
+#contact {
+  background: #f8f9fa;
+  border-radius: 12px;
+  text-align: center;
+}
+
+#contact a {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #c0392b;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+#contact a:hover {
+  background: #e74c3c;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 15px;
+  background: #c0392b;
+  color: white;
+  margin-top: 20px;
+}
+
+  .brand {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: 0.3px;
+    gap: 10px;
+  }
+  .brand img {
+    height: 36px;
+    width: auto;
+    display: block;
+  }
+  .brand span {
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+
+<!-- ====== HEADER ====== -->
+<header>
+  <nav>
+     <div class="brand">
+      <img src="oil.jpg" alt="#">
+ 
+    </div>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#products">Products</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<!-- ====== HOME ====== -->
+<section id="home">
+  <h1>Palm Fresh Nigeria</h1>
+  <p>Pure, fresh, and organic palm oil sourced directly from Nigeria’s finest plantations.</p>
+</section>
+
+<!-- ====== ABOUT ====== -->
+<section id="about">
+  <h2>About Us</h2>
+  <p>
+    At Palm Fresh Nigeria, we pride ourselves in delivering high-quality, organic palm oil
+    to households and businesses. Our products are sourced directly from trusted farmers
+    and processed without chemicals, ensuring you get the natural goodness in every drop.
+  </p>
+</section>
+
+<!-- ====== PRODUCTS ====== -->
+<section id="products">
+  <h2>Our Products</h2>
+ <div class="product-card">
+  <img src="https://images.unsplash.com/photo-1622713348851-3e508a403ef4" alt="Palm Oil Bottle">
+  <h3>1 Litre Bottle</h3>
+  <p>₦1,500</p>
+  <a href="https://wa.me/2348012345678?text=Hello!%20I%20would%20like%20to%20order%20one%201%20Litre%20Palm%20Oil%20Bottle%20for%20%E2%82%A61,500" target="_blank" style="display:inline-block;background:#27ae60;color:white;padding:10px 15px;border-radius:6px;text-decoration:none;">
+    Buy Now
+  </a>
+</div>
+
+  <div class="product-card">
+    <img src="https://images.unsplash.com/photo-1602016754033-bd5b228c934d" alt="Palm Oil Gallon">
+    <h3>5 Litre Gallon</h3>
+    <p>₦6,500</p>
+  </div>
+  <div class="product-card">
+    <img src="https://images.unsplash.com/photo-1589182337355-e51d1fb66365" alt="Palm Oil Drum">
+    <h3>25 Litre Drum</h3>
+    <p>₦30,000</p>
+  </div>
+</section>
+
+<!-- ====== CONTACT ====== -->
+<section id="contact">
+  <h2>Contact Us</h2>
+  <p>📞 Call/WhatsApp: <strong>+234 8033044452</strong></p>
+  <p>📧 Email: <strong>info@palmfresh.com.ng</strong></p>
+  <a href="https://wa.me/2348012345678" target="_blank">Message on WhatsApp</a>
+</section>
+
+<!-- ====== FOOTER ====== -->
+<footer>
+  <p>&copy; 2025 Palm Fresh Nigeria. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

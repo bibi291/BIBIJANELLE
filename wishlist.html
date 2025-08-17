@@ -7,7 +7,7 @@
 
   <!-- FontAwesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-
+  <link rel="icon" href="ICON.png" type="image/png">
   <!-- External CSS -->
   <link rel="stylesheet" href="style.css">
   
@@ -407,17 +407,33 @@
   </section>
 
   <script>
-    const products = [
-      { id: 1, name: "Beaded Necklace", img: "images/A1.png", price: 25 },
-      { id: 2, name: "Necklace", img: "images/A2.png", price: 15 },
-      { id: 3, name: "Necklace", img: "images/A3.png", price: 35 },
-      { id: 4, name: "Necklace", img: "images/A4.png", price: 18 },
-      { id: 5, name: "Necklace", img: "images/A5.png", price: 18 },
-      { id: 6, name: "Bracelet", img: "images/B1.png", price: 18 },
-        { id: 7, name: "Bracelet", img: "images/B2.png", price: 18 },
-          { id: 8, name: "Bracelet", img: "images/B3.png", price: 18 },
-            { id: 9, name: "Bracele", img: "images/B4.png", price: 18 }
-    ];
+  const products = [
+  { id: 1, name: "Midnight Onyx Necklace", img: "IMAGES/A1.png", imgHover: "bobo.jpeg", price: 10, type: "NECKLACE", link: "A1.html", tag: "🔥 New" },
+  { id: 2, name: "Sky Whisper Necklace", img: "IMAGES/A2.png", imgHover: "bobo.jpeg", price: 10, type: "NECKLACE", link: "A2.html" },
+  { id: 3, name: "Crystal Garden Necklace Set", img: "IMAGES/A3.png", imgHover: "bobo.jpeg", price: 10, type: "NECKLACE", link: "A3.html" },
+  { id: 4, name: "Silver Teardrop Necklace Set", img: "IMAGES/A4.png", imgHover: "bobo.jpeg", price: 10, type: "NECKLACE", link: "A4.html" },
+  { id: 5, name: "Lime Bead Loop Necklace", img: "IMAGES/B1.png", imgHover: "IMAGES/B1a.png", price: 5, type: "BRACELET", link: "B1.html" },
+  { id: 6, name: "Red Ember Necklace", img: "IMAGES/A5.png", imgHover: "bobo.jpeg", price: 10, type: "NECKLACE", link: "A5.html" },
+  { id: 7, name: "Blush Coral Necklace", img: "IMAGES/A6.png", imgHover: "bobo.jpeg", price: 10, type: "NECKLACE", link: "A6.html" },
+  { id: 8, name: "Mint Serenity Necklace", img: "IMAGES/A7.png", imgHover: "bobo.jpeg", price: 10, type: "NECKLACE", link: "A7.html" },
+  { id: 9, name: "Mint Serenity Bracelet", img: "IMAGES/B2.png", imgHover: "bobo.jpeg", price: 10, type: "BRACELET", link: "B2.html", tag: "⭐ Popular" },
+  { id: 10, name: "Mint Serenity Bracelet", img: "IMAGES/B3.png", imgHover: "bobo.jpeg", price: 5, type: "BRACELET", link: "B3.html", tag: "💎 Limited" },
+  { id: 11, name: "Peppermint Pop Bracelet", img: "IMAGES/B4.png", imgHover: "bobo.jpeg", price: 5, type: "BRACELET", link: "B4.html" },
+  { id: 12, name: "Deep Sea Sparkle Necklace", img: "IMAGES/A8.png", imgHover: "IMAGES/A8a.png", price: 10, type: "NECKLACE", link: "A8.html" },
+  { id: 13, name: "Ocean Breeze Bracelet", img: "IMAGES/B5.png", imgHover: "bobo.jpeg", price: 5, type: "BRACELET", link: "B5.html" },
+  { id: 14, name: "Lemon Blush Bracelet", img: "IMAGES/B6.png", imgHover: "bobo.jpeg", price: 6, type: "BRACELET", link: "B6.html" },
+  { id: 15, name: "Mint Serenity Necklace", img: "IMAGES/C1.png", imgHover: "bobo.jpeg", price: 10, type: "NECKLACE", link: "C1.html", tag: "💎 Limited" },
+  { id: 16, name: "Mint Serenity Necklace", img: "IMAGES/C2.png", imgHover: "bobo.jpeg", price: 10, type: "NECKLACE", link: "C2.html", tag: "💎 Limited" },
+  { id: 17, name: "Pearl Elegance Bracelet", img: "IMAGES/B7.png", imgHover: "bobo.jpeg", price: 10, type: "BRACELET", link: "B7.html" },
+  { id: 18, name: "Emerald Grace Jewelry Set", img: "IMAGES/A9.png", imgHover: "IMAGES/A9a.png", price: 10, type: "NECKLACE", link: "A9.html" },
+  { id: 19, name: "Turquoise Twilight Bracelet", img: "IMAGES/B8.png", imgHover: "IMAGES/B8.png", price: 5, type: "BRACELET", link: "B8.html" },
+  { id: 20, name: "Cherry Dusk Bracelet", img: "IMAGES/B9.png", imgHover: "IMAGES/A9a.png", price: 10, type: "BRACELET", link: "B9.html" },
+  { id: 21, name: "Cherry Dusk Necklace", img: "IMAGES/A10.png", imgHover: "IMAGES/A9a.png", price: 10, type: "NECKLACE", link: "A10.html" },
+  { id: 22, name: "Cherry Dusk Bracelet", img: "IMAGES/b10.png", imgHover: "IMAGES/A9a.png", price: 10, type: "BRACELET", link: "B10.html" },
+  { id: 23, name: "Classic Bag", img: "IMAGES/D1.png", imgHover: "IMAGES/A9a.png", price: 47, type: "BAG", link: "D1.html" },
+  { id: 24, name: "Red Bag", img: "IMAGES/A11.png", imgHover: "IMAGES/A9a.png", price: 25, type: "NECKLACE", link: "B9.html" }
+];
+
 
     const productList = document.getElementById("product-list");
     const wishlistSection = document.getElementById("wishlist-section");

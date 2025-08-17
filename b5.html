@@ -4,8 +4,9 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Responsive Bead Website </title>
+        <title>Bibijanelle </title>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+         <link rel="icon" href="ICON.png" type="image/png">
         <link rel="stylesheet" href="style.css">
         <script src="pipi.js" async></script>
         <script src="bibi.js" async></script>
@@ -107,7 +108,7 @@
               display: block;
             }
       
-       
+      
           }
       
           /* Slideshow Background */
@@ -327,9 +328,7 @@
 <head>
 
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Seamless Sculpt Thong Bodysuit</title>
+  
 
 
 
@@ -495,7 +494,7 @@
 <div class="container">
   <div class="left">
     <div class="thumbnails">
-      <img src="RED AI.png" alt="thumb">
+      <img src="IMAGES/A8a.png" alt="thumb">
       <img src="RED AI.png" alt="thumb">
       <img src="RED AI.png" alt="thumb">
     </div>
@@ -506,22 +505,14 @@
     </div>
   </div>
 
-  <div class="right">Amazing</h2>
-    <div class="price">€88</div>
+  <div class="right">Berry Bracelet</h2>
+    <div class="price">€5</div>
 
-    <div><strong>Color: Cocoa</strong></div>
-    <div class="colors">
-      <span style="background-color:#f1e0d6;"></span>
-      <span style="background-color:#b49583;"></span>
-      <span style="background-color:#926b57;"></span>
-      <span style="background-color:#5e3c2f;"></span>
-    </div>
+   
 
- 
+    <div class="warning">Your Perfect Match Awaits! Find your size and shine in a piece made just for you.</div>
 
-    <div class="warning">Going Fast! Order your usual size for maximum compression. For added comfort and all-day wear, we suggest sizing up.</div>
-
-    <button class="add-cart" data-tag="RED1" onclick="window.location.href='https://buy.stripe.com/fZudRa3yZ6Yz3pJ31s9Ve0h'">BUY NOW</button>
+    <button class="add-cart" data-tag="RED1" onclick="window.location.href='https://buy.stripe.com/9B6eVe8TjaaLgcvdG69Ve05'">BUY NOW</button>
 
     <div class="tab-buttons">
       <button class="tab-btn active" data-tab="details">Details</button>
@@ -530,18 +521,18 @@
 
     <div id="details" class="tab-content active">
       <h4>Product Details</h4>
-      <p>- Seamless design<br>- Adjustable straps<br>- Snap closure at base<br>- Breathable nylon/spandex blend</p>
+      <p>- Seamless design<br>- stretch-resistant beading thread<br>- Handcrafted with high-quality glass<br>- Secure clasp </p>
     </div>
 
     <div id="fit" class="tab-content">
-      <h4>Fit & Fabric</h4>
-      <p>Fits true to size. Model wears size S. Machine wash cold, lay flat to dry.</p>
+      <h4>Size & Materials</h4>
+      <p>Available in multiple lengths to suit your style</p>
     </div>
   </div>
 </div>
 
 <script>
-  const images = ["images/B5.png", "RED AI.png", "RED AI.png"];
+  const images = ["images/B5.png", "IMAGES/A8a.png", "RED AI.png"];
   let index = 0;
   const mainImg = document.getElementById("mainImg");
 
@@ -583,77 +574,91 @@
 </script>
 
 
-<section id="comments">
-    <h2>Comments</h2>
-    <div id="comment-list"></div>
-    <form id="comment-form">
-        <input type="text" id="comment-name" placeholder="Your Name" required>
-        <textarea id="comment-text" placeholder="Your Comment" required></textarea>
-        <button type="submit">Post Comment</button>
-    </form>
-</section>
+<!-- Review Section -->
+<div class="review-section">
+
+  <!-- Title -->
+  <h2 class="review-title">Customer Reviews</h2>
+  <p class="review-subtitle">Share your experience and help others decide</p>
+
+  <!-- Typeform Rating Form -->
+
+
+  <!-- Divider -->
+  <div class="review-divider"></div>
+
+  <!-- Comment Section -->
+   <div class="commentbox"></div>
+<script src="https://unpkg.com/commentbox.io/dist/commentBox.min.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-const commentList = document.getElementById("comment-list");
-const commentForm = document.getElementById("comment-form");
-
-// Load comments from localStorage on page load
-loadComments();
-
-commentForm.addEventListener("submit", function(event) {
-    event.preventDefault();
-
-    const nameInput = document.getElementById("comment-name");
-    const textInput = document.getElementById("comment-text");
-
-    const name = nameInput.value;
-    const text = textInput.value;
-
-    if (name && text) {
-        addComment(name, text);
-        nameInput.value = "";
-        textInput.value = "";
-
-        // Save comments to localStorage
-        saveComments();
-    } else {
-        alert("Please fill out all fields");
-    }
-});
-
-function addComment(name, text) {
-    const commentDiv = document.createElement("div");
-    commentDiv.classList.add("comment");
-
-    const namePara = document.createElement("p");
-    namePara.textContent = name;
-    const textPara = document.createElement("p");
-    textPara.textContent = text;
-
-    commentDiv.appendChild(namePara);
-    commentDiv.appendChild(textPara);
-
-    commentList.appendChild(commentDiv);
-}
-
-function loadComments() {
-    const comments = JSON.parse(localStorage.getItem("comments")) || [];
-    comments.forEach(comment => {
-        addComment(comment.name, comment.text);
-    });
-}
-
-function saveComments() {
-    const comments = Array.from(commentList.children).map(commentDiv => {
-        const name = commentDiv.querySelector("p:first-child").textContent;
-        const text = commentDiv.querySelector("p:last-child").textContent;
-        return { name, text };
-    });
-    localStorage.setItem("comments", JSON.stringify(comments));
-}
-});
-
+  commentBox('5680138129768448-proj', {
+    className: 'commentbox',
+    defaultBoxId: 'my-page-comments', // Optional: helps keep comments unique per page
+    tlcParam: 'tlc' // Optional: thread linking
+  });
 </script>
+</div>
+
+<!-- CommentBox.io Script -->
+<script src="https://unpkg.com/commentbox.io/dist/commentBox.min.js"></script>
+<script>
+commentBox('5680138129768448-proj', {
+  defaultBoxId: 'product-' + (new URLSearchParams(window.location.search).get('id') || 'default'),
+  className: 'commentbox',
+  sortOrder: 'best'
+});
+</script>
+
+<!-- CSS Styling -->
+<style>
+.review-section {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  font-family: "Segoe UI", sans-serif;
+  color: #333;
+}
+
+.review-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #222;
+}
+
+.review-subtitle {
+  font-size: 1rem;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.review-form {
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin-bottom: 30px;
+}
+
+.review-divider {
+  height: 1px;
+  background-color: #eee;
+  margin: 30px 0;
+}
+
+.commentbox-container {
+  background: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.commentbox {
+  --commentbox-border: none;
+}
+</style>
+
 
 <style>
     #comments {
@@ -757,6 +762,12 @@ function saveComments() {
   overflow: hidden;
   background: white;
 }
+
+.fas.fa-shopping-cart{
+  color: rgb(255, 99, 136);
+}
+
+
   </style>
   
 
@@ -765,58 +776,58 @@ function saveComments() {
     <h2>Featured Products</h2>
     <p>Summer Collection</p>
     <div class="pro-container">
-             <div class="pro" data-color="NECKLACE" data-price="20.99"  onclick="window.location.href='A1.HTML';" >
+             <div class="pro" data-color="NECKLACE" data-price="20.99"  onclick="window.location.href='B2.HTML';" >
                 <DIv class="product">
                  <div class="status-flag new">🔥 New</div> 
-                <img src="IMAGES/A1.png" alt="">
-                <img class="img-hover" src="bobo.jpeg" alt="Product Side">
+                <img src="IMAGES/B2.png" alt="">
+                <img class="img-hover" src="IMAGES/B2a.png" alt="Product Side">
                 <div class="des">
                     <span>classic</span>
-                    <h5> Midnight Onyx Necklace</h5>
-                    <h4>£47</h4>
+                    <h5> Berry Bracelet</h5>
+                    <h4>€5</h4>
                  </div>
                  <a href="#"><i class="fas fa-shopping-cart"></i></a>
                 </DIv>
             </div>
 
-            <div class="pro" data-color="NECKLACE" data-price="20.99"  onclick="window.location.href='A2.html';" >
-              <DIv class="product">
-              <img src="IMAGES/A2.png" alt="">
-              <img class="img-hover" src="bobo.jpeg" alt="Product Side">
-              <div class="des">
-                  <span>red</span>
-                  <h5>Sky Whisper Necklace</h5>
-                  <h4>£47</h4>
-               </div>
-               <a href="#"><i class="fas fa-shopping-cart"></i></a>
-              </DIv>
-          </div>
+         <div class="pro" data-color="NECKLACE" data-price="20.99"  onclick="window.location.href='A9.html';" >
+  <DIv class="product">
+  <img src="IMAGES/A9.png" alt="">
+  <img class="img-hover" src="IMAGES/A9a.png" alt="Product Side">
+  <div class="des">
+      <span>elegant</span>
+      <h5> Emerald Jewelry Set</h5>
+      <h4>€10</h4>
+   </div>
+   <a href="#"><i class="fas fa-shopping-cart"></i></a>
+  </DIv>
+</div>
          
-          <div class="pro" data-color="NECKLACE" data-price="20.99"  onclick="window.location.href='A3.html';" >
-            <DIv class="product">
-            <img src="IMAGES/A3.png" alt="">
-            <img class="img-hover" src="bobo.jpeg" alt="Product Side">
-            <div class="des">
-                <span>pretty</span>
-                <h5>Crystal Garden Necklace Set</h5>
-                <h4>£47</h4>
-             </div>
-             <a href="#"><i class="fas fa-shopping-cart"></i></a>
-            </DIv>
-        </div>
-        <div class="pro" data-color="NECKLACE" data-price="20.99"  onclick="window.location.href='A4.html';" >
-          <DIv class="product">
-          <img src="IMAGES/A4.png" alt="">
-          <img class="img-hover" src="bobo.jpeg" alt="Product Side">
-          <div class="des">
-              <span>elegant</span>
-              <h5>Silver Teardrop Necklace Set</h5>
-              <h4>£47</h4>
-           </div>
-           <a href="#"><i class="fas fa-shopping-cart"></i></a>
-          </DIv>
-      </div>
        
+<div class="pro" data-color="NECKLACE" data-price="20.99"  onclick="window.location.href='A8.html';" >
+  <DIv class="product">
+  <img src="IMAGES/A8.png" alt="">
+  <img class="img-hover" src="IMAGES/A8a.png" alt="Product Side">
+  <div class="des">
+      <span>pretty</span>
+      <h5> Deep Sea  Necklace</h5>
+      <h4>€10</h4>
+   </div>
+   <a href="#"><i class="fas fa-shopping-cart"></i></a>
+  </DIv>
+</div>
+            <div class="pro" data-color="BRACELET" data-price="20.99"  onclick="window.location.href='B1.html';" >
+        <DIv class="product">
+        <img src="IMAGES/B1.png" alt="">
+        <img class="img-hover" src="IMAGES/B1a.png" alt="Product Side">
+        <div class="des">
+            <span>pretty</span>
+            <h5>Lime Bead Bracelet</h5>
+            <h4>€5</h4>
+         </div>
+          <a href="#"><i class="fas fa-shopping-cart"></i></a>
+        </DIv>
+    </div>
     </div>
 
 </section>
@@ -855,58 +866,7 @@ function saveComments() {
       var $mcj = jQuery.noConflict(true);
     </script>
   </section>
-<footer class="section-p1">
-    <div class="col">
-        <img class="logo"src="bibi.png" alt="">
-        <h4>contact</h4>
-        <p><strong>Address: </strong>11 Portersfield</p>
-        <p><strong>Phone: </strong>+353899818717</p>
-        <p><strong>Hours: </strong>10:00 - 11:00, Mon - Sat</p>
-        <div class="follow">
-            <h4>Follow us</h4>
-            <div class="icon">
-                <i class="fab fa-facebook-f"></i>
-                <i class="fab fa-twitter"></i>
-                <i class="fab fa-instagram"></i>
-                <i class="fab fa-pinterest-p"></i>
-                <i class="fab fa-youtube"></i>
-            </div>
-        </div>
 
-    </div>
-    <div class="col">
-        <h4>About</h4>
-        <a href="#">About us</a>
-        <a href="#">Delivery Information</a>
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms and Conditions</a>
-        <a href="#">Contact us</a>
-    </div>
-
-    <div class="col">
-        <h4>My Account</h4>
-        <a href="#">Sign In</a>
-        <a href="#">View Cart</a>
-        <a href="wishlist.html" >My Wishlist</a>
-        <a href="#">Track My Order</a>
-        <a href="#">Help</a>
-    </div>
-
-    <div class="col install">
-        <h4>Install App</h4>
-        <p>From Appstore or GooglePlay</p>
-        <div class="row">
-            <img src="koko.png" width="20%"   alt="">
-            <img src="roro.png" width="20%"   alt="">
-        </div>
-        <p>Secured Payment Gateways</p>
-        <img src="money.png" alt="">
-    </div>
-
-    <div class="copyright">
-        <p>© 2021, Tech 2 etc - HTML CSS ECOMMERCE </p>
-    </div>
-</footer>
 
 
 </body>

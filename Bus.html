@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>HoneyCrown Bus Services</title>
+<style>
+  /* === Reset & Basic === */
+  * {box-sizing: border-box;margin:0;padding:0}
+  html {scroll-behavior:smooth}
+  body {font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; color:#222; background:#fafafa; line-height:1.5}
+
+  /* === Header === */
+  header {
+    position:fixed;top:0;left:0;width:100%;z-index:1000;
+    background: linear-gradient(90deg,#ff73e1,#ff72f3);
+    color:#fff;padding:14px 20px;box-shadow:0 6px 18px rgba(20,60,100,0.12);
+  }
+  nav {max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .brand {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: 0.3px;
+    gap: 10px;
+  }
+  .brand img {
+    height: 36px;
+    width: auto;
+    display: block;
+  }
+  .brand span {
+    white-space: nowrap;
+  }
+
+  .navlinks {display:flex;gap:18px}
+  .navlinks a {color:rgba(255,255,255,.95);text-decoration:none;font-weight:600}
+  .navlinks a:hover {text-decoration:underline}
+
+  /* === Page container === */
+  .container {max-width:1100px;margin:100px auto 60px;padding:0 18px}
+
+  /* === Hero === */
+  .hero {display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:center;margin-bottom:28px}
+  .hero-card {background:#fff;padding:28px;border-radius:12px;box-shadow:0 8px 30px rgba(20,60,100,0.06)}
+  .hero h1 {font-size:2rem;color:#013a63;margin-bottom:8px}
+  .hero p {color:#4a4a4a;margin-bottom:18px}
+  .cta-row {display:flex;gap:12px;flex-wrap:wrap}
+  .btn {display:inline-block;padding:10px 16px;border-radius:8px;text-decoration:none;font-weight:700}
+  .btn-primary {background:#ff8a00;color:#fff}
+  .btn-ghost {background:transparent;border:2px solid #ff8a00;color:#ff8a00}
+
+  .hero-side {background:linear-gradient(180deg,#fff,#f7fdff);padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(5,70,110,0.04)}
+  .info {font-weight:700;color:#073b57;margin-bottom:8px}
+  .small {color:#556}
+
+  /* === Sections === */
+  section {margin-bottom:30px}
+  h2.section-title {font-size:1.4rem;color:#073b57;margin-bottom:8px}
+  p.lead {color:#546b78;margin-bottom:12px}
+
+  /* === Fleet cards === */
+  .fleet-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+  .card {background:#fff;padding:14px;border-radius:12px;box-shadow:0 6px 20px rgba(20,60,100,0.06);text-align:center}
+  .card img {width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:10px}
+  .card h3 {color:#0b486b;margin-bottom:6px}
+
+  /* === Booking form (modal) === */
+  .book-btn {background:#06b84d;color:#fff;padding:10px 12px;border-radius:8px;text-decoration:none;font-weight:700}
+  .modal-backdrop {position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:1200}
+  .modal {background:#fff;padding:18px;border-radius:12px;width:480px;max-width:92%;box-shadow:0 12px 40px rgba(8,40,80,0.2)}
+  .modal h3 {margin-bottom:10px;color:#0b486b}
+  .modal label {display:block;font-weight:600;margin-top:8px;color:#344}
+  .modal input,.modal select,.modal textarea {width:100%;padding:9px 10px;margin-top:6px;border:1px solid #e6eef2;border-radius:8px}
+  .modal .row {display:flex;gap:8px}
+  .modal .row .col {flex:1}
+  .modal .actions {display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+
+  /* === Contact & footer === */
+  .contact-card {background:#fff;padding:16px;border-radius:10px;box-shadow:0 8px 20px rgba(20,60,100,0.06)}
+  footer {text-align:center;padding:18px;color:#fff;background:linear-gradient(90deg,#1e90ff,#2bb3ff);border-top-left-radius:10px;border-top-right-radius:10px;margin-top:20px}
+
+  /* === Responsive === */
+  @media (max-width:880px) {
+    .hero {grid-template-columns:1fr}
+    header nav {flex-direction:column;gap:8px}
+    .navlinks {order:2}
+    .brand {order:1}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="brand">
+      <img src="Bus.png" alt="HoneyCrown Bus Services Logo">
+      <span>HoneyCrown Bus Services</span>
+    </div>
+    <div class="navlinks">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#fleet">Fleet</a>
+      <a href="#booking">Booking</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+</header>
+
+<main class="container">
+
+  <!-- HERO -->
+  <section id="home" class="hero">
+    <div class="hero-card">
+      <h1>HoneyCrown Bus Services</h1>
+      <p class="lead">Comfortable, reliable intercity travel across Nigeria. Safe drivers, clean buses, fair fares.</p>
+
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#booking" onclick="openModal()">Book Now</a>
+        <a class="btn-ghost" href="#fleet">Our Fleet</a>
+        <a class="btn" style="background:#fff;border-radius:8px;padding:10px 12px;color:#1e90ff;font-weight:700;text-decoration:none" href="https://wa.me/2348012345678?text=Hi%20I%20want%20to%20book%20a%20ticket" target="_blank">WhatsApp</a>
+      </div>
+
+      <p style="margin-top:14px;color:#556">Operating daily across major southern routes. Special charter services available.</p>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <h2 class="section-title">About HoneyCrown Bus Services</h2>
+    <p class="lead">We are a family-run bus company serving major routes. Our fleet is inspected daily and we prioritise passenger safety and comfort.</p>
+  </section>
+
+  <!-- FLEET -->
+  <section id="fleet">
+    <h2 class="section-title">Our Fleet</h2>
+    <div class="fleet-grid">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70" alt="Bus 1">
+        <h3>Executive Coach</h3>
+        <p>Air-conditioned • Recliner seats • WiFi on request</p>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1549924231-f129b911e442" alt="Bus 2">
+        <h3>Standard Coach</h3>
+        <p>Comfortable seating • Luggage space • Safe driving</p>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1526772662000-3f88f10405ff" alt="Bus 3">
+        <h3>Shuttle</h3>
+        <p>Short distance routes • Frequent departures</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING -->
+  <section id="booking">
+    <h2 class="section-title">Booking</h2>
+    <p class="lead">Quickly book a seat — choose your route, travel date and seats. We’ll open WhatsApp so you can confirm the booking with us.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <a class="btn btn-primary" href="#" onclick="openModal()">Book Now</a>
+      <a class="btn" style="background:#fff;border:2px solid #1e90ff;color:#1e90ff;font-weight:700" href="https://wa.me/2348012345678?text=Hi%20I%20want%20to%20book%20a%20ticket" target="_blank">Message on WhatsApp</a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <h2 class="section-title">Contact & Pickup</h2>
+    <div class="contact-card" style="display:flex;gap:18px;flex-wrap:wrap;align-items:center">
+      <div style="flex:1;min-width:200px">
+        <p><strong>Phone / WhatsApp</strong><br>+234 801 234 5678</p>
+        <p><strong>Email</strong><br>info@sunnyride.ng</p>
+        <p><strong>Office</strong><br>12 Akintola St, Lagos</p>
+      </div>
+      <div style="min-width:260px">
+        <iframe src="https://www.google.com/maps?q=lagos+state+office&output=embed" width="100%" height="150" style="border:0;border-radius:8px"></iframe>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div>© <span id="year"></span> HoneyCrown Bus Services • Safe rides, happy journeys</div>
+</footer>
+
+<!-- === Booking Modal === -->
+<div id="modalBackdrop" class="modal-backdrop" onclick="closeModal(event)">
+  <div class="modal" role="dialog" aria-modal="true" onclick="event.stopPropagation()">
+    <h3>Book a Ticket</h3>
+    <form id="bookingForm" onsubmit="handleBooking(event)">
+      <label>Full name</label>
+      <input id="b_name" required placeholder="Your name">
+
+      <label>Route (type the route you want)</label>
+      <input id="b_route" required placeholder="e.g. Lagos → Ibadan">
+
+      <div class="row">
+        <div class="col">
+          <label>Travel date</label>
+          <input id="b_date" type="date" required>
+        </div>
+        <div class="col">
+          <label>Seats</label>
+          <input id="b_seats" type="number" min="1" value="1" required>
+        </div>
+      </div>
+
+      <label>Phone</label>
+      <input id="b_phone" required placeholder="+2348012345678">
+
+      <label>Additional notes (optional)</label>
+      <textarea id="b_notes" rows="3" placeholder="Any special requests, pickup point, etc."></textarea>
+
+      <div class="actions">
+        <button type="button" class="btn-ghost" onclick="closeModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Send Booking (WhatsApp)</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Helpers
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  function openModal(prefRoute){
+    document.getElementById('modalBackdrop').style.display = 'flex';
+    if(prefRoute) {
+      document.getElementById('b_route').value = prefRoute;
+    }
+  }
+  function closeModal(e){
+    if(e && e.target !== e.currentTarget) return;
+    document.getElementById('modalBackdrop').style.display = 'none';
+  }
+
+  function handleBooking(ev){
+    ev.preventDefault();
+    const name = document.getElementById('b_name').value.trim();
+    const route = document.getElementById('b_route').value.trim();
+    const date = document.getElementById('b_date').value;
+    const seats = document.getElementById('b_seats').value;
+    const phone = document.getElementById('b_phone').value.trim();
+    const notes = document.getElementById('b_notes').value.trim();
+
+    if(!name || !route || !date || !phone) {
+      alert('Please fill in the required fields.');
+      return;
+    }
+
+    const messageLines = [
+      `Hello HoneyCrown, I would like to book ${seats} seat(s).`,
+      `Route: ${route}`,
+      `Date: ${date}`,
+      `Passenger: ${name}`,
+      `Contact phone: ${phone}`
+    ];
+    if(notes) messageLines.push(`Notes: ${notes}`);
+
+    const message = messageLines.join(' %0A ');
+    const businessNumber = '2348012345678';
+    const waUrl = `https://wa.me/${businessNumber}?text=${encodeURIComponent(message)}`;
+
+    window.open(waUrl, '_blank');
+    closeModal();
+  }
+
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape') closeModal();
+  });
+</script>
+</body>
+</html>
