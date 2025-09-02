@@ -83,50 +83,17 @@
     </div>
   </header>
 
-  <script>
-    // Helper function to get wishlist from local storage
-    function getWishlist() {
-      const wishlist = localStorage.getItem('wishlist');
-      return wishlist ? JSON.parse(wishlist) : [];
-    }
-    
-    // Update the count on page load
-    function updateWishlistCount() {
-      const wishlist = getWishlist();
-      document.getElementById('wishlist-count').textContent = wishlist.length;
-    }
-    
-    // Optionally, add item to wishlist (call this when someone clicks a "heart" button)
-    function addToWishlist(productId) {
-      let wishlist = getWishlist();
-      if (!wishlist.includes(productId)) {
-        wishlist.push(productId);
-        localStorage.setItem('wishlist', JSON.stringify(wishlist));
-        updateWishlistCount();
-      }
-    }
-    
-    // Optionally, remove item
-    function removeFromWishlist(productId) {
-      let wishlist = getWishlist().filter(id => id !== productId);
-      localStorage.setItem('wishlist', JSON.stringify(wishlist));
-      updateWishlistCount();
-    }
-    
-    // Update count on every page load
-    document.addEventListener('DOMContentLoaded', updateWishlistCount);
-    </script>
-    
+ 
   <!-- Script for Mobile Menu -->
-  <script>
-    function toggleMenu() {
-      document.getElementById("mobile-menu").classList.toggle("show");
-    }
-  </script>
+ 
+       <script>
+      function toggleMenu() {
+        document.getElementById("mobile-menu").classList.toggle("show");
+      }
+    </script>
       
-    <section id="page-header">
-        <h2>#Stayhome</h2>
-        <p>Save More</p>
+   <section id="page-header">
+     
     </section>
   
     <input type="text" id="searchInput" placeholder="Search products">
@@ -188,6 +155,7 @@
 
 
     <style>
+
 #searchInput {
   width: 100%;
   padding: 10px 15px;
@@ -517,6 +485,121 @@
 
 
   </style>
+<script>
+  const wishlistCount = document.getElementById("wishlist-count");
+  const wishlistBtns = document.querySelectorAll(".wishlist-btn i");
+
+  // Load wishlist from localStorage
+  let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+  // Update counter
+  function updateWishlistCount() {
+    wishlistCount.textContent = wishlist.length;
+  }
+
+  // Toggle wishlist
+  wishlistBtns.forEach((btn, index) => {
+    const productId = "product-" + index; // simple ID system
+
+    // Mark as active if already saved
+    if (wishlist.includes(productId)) {
+      btn.classList.add("active");
+    }
+
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (wishlist.includes(productId)) {
+        // Remove
+        wishlist = wishlist.filter(id => id !== productId);
+        btn.classList.remove("active");
+      } else {
+        // Add
+        wishlist.push(productId);
+        btn.classList.add("active");
+      }
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+      updateWishlistCount();
+    });
+  });
+
+  // Initialize
+  updateWishlistCount();
+</script>
+<style>
+.wishlist-btn i {
+  color: #ccc;
+  font-size: 20px;
+  margin-left: 8px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.wishlist-btn i.active {
+  color: crimson;
+}
+
+
+
+
+</style>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const wishlistCount = document.getElementById("wishlist-count");
+  const wishlistBtns = document.querySelectorAll(".wishlist-btn i");
+
+  // Load wishlist from localStorage (array of product IDs)
+  let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+  // Update counter
+  function updateWishlistCount() {
+    wishlistCount.textContent = wishlist.length;
+  }
+
+  // Add event listeners for each heart
+  wishlistBtns.forEach((btn, index) => {
+    // Use product ID from parent .pro (better than just index)
+    const product = btn.closest(".pro");
+    const productId = product.getAttribute("onclick") || "product-" + index;
+
+    // Save product details (so wishlist.html can use them)
+    const productData = {
+      id: productId,
+      name: product.querySelector("h5").innerText,
+      price: product.querySelector("h4").innerText,
+      img: product.querySelector("img").src,
+      link: product.getAttribute("onclick")?.replace("window.location.href=", "").replace(/['";]/g, "")
+    };
+
+    // If already in wishlist, show active heart
+    if (wishlist.some(p => p.id === productId)) {
+      btn.classList.add("active");
+    }
+
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      if (wishlist.some(p => p.id === productId)) {
+        // Remove from wishlist
+        wishlist = wishlist.filter(p => p.id !== productId);
+        btn.classList.remove("active");
+      } else {
+        // Add to wishlist
+        wishlist.push(productData);
+        btn.classList.add("active");
+      }
+
+      // Save back to localStorage
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+      updateWishlistCount();
+    });
+  });
+
+  // Initialize counter
+  updateWishlistCount();
+});
+</script>
 
 
     <section id="product1" class="section-p1">
@@ -531,8 +614,9 @@
                     <h5> Midnight Onyx Necklace</h5>
                     <h4>€10</h4>
                  </div>
-     <a href="#"><i class="fas fa-shopping-cart"></i></a>
 
+     <a href="#"><i class="fas fa-shopping-cart"></i></a>
+<a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
                 </DIv>
             </div>
 
@@ -546,6 +630,7 @@
                   <h4>€10</h4>
                </div>
                  <a href="#"><i class="fas fa-shopping-cart"></i></a>
+                 <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
               </DIv>
           </div>
          
@@ -559,6 +644,7 @@
                 <h4>€10</h4>
              </div>
                <a href="#"><i class="fas fa-shopping-cart"></i></a>
+               <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
             </DIv>
         </div>
         <div class="pro" data-color="NECKLACE" data-price="20.99"  onclick="window.location.href='A4.html';" >
@@ -571,6 +657,7 @@
               <h4>€10</h4>
            </div>
              <a href="#"><i class="fas fa-shopping-cart"></i></a>
+             <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
           </DIv>
       </div>
 
@@ -580,10 +667,11 @@
         <img class="img-hover" src="IMAGES/B1a.png" alt="Product Side">
         <div class="des">
             <span>pretty</span>
-            <h5>Lime Bead Loop Necklacee</h5>
+            <h5>Lime Bead Loop Bracelet</h5>
             <h4>€5</h4>
          </div>
            <a href="#"><i class="fas fa-shopping-cart"></i></a>
+           <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
         </DIv>
     </div>
     <div class="pro" data-color="NECKLACE" data-price="20.99"  onclick="window.location.href='A5.html';" >
@@ -596,6 +684,7 @@
           <h4>€10</h4>
        </div>
          <a href="#"><i class="fas fa-shopping-cart"></i></a>
+         <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
       </DIv>
   </div>
 
@@ -609,6 +698,7 @@
         <h4>€10</h4>
      </div>
        <a href="#"><i class="fas fa-shopping-cart"></i></a>
+       <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
     </DIv>
 </div>
 
@@ -622,6 +712,7 @@
       <h4>€10</h4>
    </div>
    <a href="#"><i class="fas fa-shopping-cart"></i></a>
+   <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
   </DIv>
 </div>
  
@@ -632,10 +723,11 @@
   
   <div class="des">
       <span>vibrant</span>
-      <h5>Mint Serenity Necklace</h5>
-      <h4>€10</h4>
+      <h5>Berry Bracelet</h5>
+      <h4>€5</h4>
    </div>
    <a href="#"><i class="fas fa-shopping-cart"></i></a>
+   <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
   </DIv>
 </div>
 
@@ -646,10 +738,11 @@
 
   <div class="des">
       <span>vibrant</span>
-      <h5>Mint Serenity Necklace</h5>
+      <h5>Berry Bracelet</h5>
       <h4>€5</h4>
    </div>
-  <a href="#" class="shop-now-btn">Shop Now</a>
+  <a href="#"><i class="fas fa-shopping-cart"></i></a>
+  <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
   </DIv>
 </div>
 
@@ -664,6 +757,7 @@
       <h4>€5</h4>
    </div>
      <a href="#"><i class="fas fa-shopping-cart"></i></a>
+     <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
   </DIv>
 </div>
 
@@ -678,6 +772,7 @@
       <h4>€10</h4>
    </div>
      <a href="#"><i class="fas fa-shopping-cart"></i></a>
+     <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
   </DIv>
 </div>
 <div class="pro" data-color="BRACELET" data-price="20.99"  onclick="window.location.href='B5.html';" >
@@ -690,6 +785,7 @@
       <h4>€5</h4>
    </div>
      <a href="#"><i class="fas fa-shopping-cart"></i></a>
+     <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
   </DIv>
 </div>
 
@@ -700,37 +796,40 @@
   <div class="des">
       <span>vibrant</span>
       <h5> Lemon Blush Bracelet</h5>
-      <h4>€6</h4>
+      <h4>€5</h4>
    </div>
      <a href="#"><i class="fas fa-shopping-cart"></i></a>
+     <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
   </DIv>
 </div>
 
-<div class="pro" data-color="NECKLACE" data-price="20.99"  onclick="window.location.href='C1.html';" >
+<div class="pro" data-color="Coaster" data-price="20.99"  onclick="window.location.href='C1.html';" >
   <DIv class="product">
     <div class="status-flag limited">💎 Limited</div> 
   <img src="IMAGES/C1.png" alt="">
   
   <div class="des">
       <span>vibrant</span>
-      <h5>Mint Serenity Necklace</h5>
-      <h4>€10</h4>
+      <h5>Brown and Gold Coaster</h5>
+      <h4>€12</h4>
    </div>
     <a href="#"><i class="fas fa-shopping-cart"></i></a>
+    <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
   </DIv>
 </div>
 
-<div class="pro" data-color="NECKLACE" data-price="20.99"  onclick="window.location.href='C2.html';" >
+<div class="pro" data-color="Coaster" data-price="20.99"  onclick="window.location.href='C2.html';" >
   <DIv class="product">
     <div class="status-flag limited">💎 Limited</div> 
   <img src="IMAGES/C2.png" alt="">
 
   <div class="des">
       <span>vibrant</span>
-      <h5>Mint Serenity Necklace</h5>
-      <h4>€10</h4>
+      <h5>Gold Coaster</h5>
+      <h4>€12</h4>
    </div>
   <a href="#"><i class="fas fa-shopping-cart"></i></a>
+  <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
   </DIv>
 </div>
 
@@ -741,9 +840,10 @@
   <div class="des">
       <span>elegant</span>
       <h5>Pearl Elegance Bracelet</h5>
-      <h4>€10</h4>
+      <h4>€8</h4>
    </div>
     <a href="#"><i class="fas fa-shopping-cart"></i></a>
+    <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
   </DIv>
 </div>
 
@@ -754,9 +854,10 @@
   <div class="des">
       <span>elegant</span>
       <h5> Emerald Grace Jewelry Set</h5>
-      <h4>€10</h4>
+      <h4>€15</h4>
    </div>
    <a href="#"><i class="fas fa-shopping-cart"></i></a>
+   <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
   </DIv>
 </div>
 
@@ -767,9 +868,10 @@
   <div class="des">
       <span>pretty</span>
       <h5>Turquoise Twilight Bracelet</h5>
-      <h4>€5</h4>
+      <h4>€8</h4>
    </div>
      <a href="#"><i class="fas fa-shopping-cart"></i></a>
+     <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
   </DIv>
 </div>
 
@@ -780,9 +882,10 @@
   <div class="des">
       <span>classic</span>
       <h5> Bracelet</h5>
-      <h4>€10</h4>
+      <h4>€8</h4>
    </div>
    <a href="#"><i class="fas fa-shopping-cart"></i></a>
+   <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
   </DIv>
 </div>
 
@@ -796,6 +899,7 @@
       <h4>€20</h4>
    </div>
     <a href="#"><i class="fas fa-shopping-cart"></i></a>
+    <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
   </DIv>
 </div>
 
@@ -806,9 +910,10 @@
   <div class="des">
       <span>classic</span>
       <h5> Cherry Dusk Bracelet</h5>
-      <h4>€10</h4>
+      <h4>€8</h4>
    </div>
     <a href="#"><i class="fas fa-shopping-cart"></i></a>
+    <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
   </DIv>
 </div>
 <div class="pro" data-color="BAG" data-price="20.99"  onclick="window.location.href='D1.html';" >
@@ -821,6 +926,7 @@
       <h4>€35</h4>
    </div>
     <a href="#"><i class="fas fa-shopping-cart"></i></a>
+    <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
   </DIv>
 </div>
 
@@ -834,6 +940,7 @@
       <h4>€15</h4>
    </div>
   <a href="#"><i class="fas fa-shopping-cart"></i></a>
+  <a href="#" class="wishlist-btn"><i class="fas fa-heart"></i></a>
   </DIv>
 </div>
 
