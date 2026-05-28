@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart – BibiJanelle</title>
+  <link rel="icon" href="ICON.PNG" type="image/png">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --pink: #ffc7de;
+      --deep: #4a2c2a;
+      --accent: #f26b8a;
+      --gradient: linear-gradient(135deg, #ff88ae, #ff6fcf);
+      --header-height: 80px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: #fff9fb;
+      color: var(--deep);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: var(--header-height);
+      background: var(--pink);
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 30px;
+      z-index: 999;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+    header img { height: 50px; width: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--deep); }
+    nav { display: flex; gap: 16px; align-items: center; }
+    nav a {
+      font-family: 'Great Vibes', cursive; font-size: 1.3rem;
+      color: var(--deep); text-decoration: none;
+      background: #fff; padding: 7px 16px; border-radius: 30px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: background 0.3s;
+    }
+    nav a:hover { background: #fddde6; }
+    nav a.active { background: var(--accent); color: #fff; }
+    .cart-header-btn { position: relative; cursor: pointer; text-decoration: none; }
+    .cart-header-btn .fas { font-size: 1.5rem; color: var(--deep); }
+    #cart-count-badge {
+      position: absolute; top: -8px; right: -8px;
+      background: crimson; color: #fff; font-size: 11px; font-weight: bold;
+      width: 20px; height: 20px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .menu-toggle { display: none; font-size: 1.8rem; cursor: pointer; color: var(--deep); }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+
+    @media (max-width: 768px) {
+      nav {
+        position: absolute; top: var(--header-height); left: 0;
+        width: 100%; flex-direction: column;
+        background: #ffe6f0; display: none; padding: 20px 0; z-index: 998;
+      }
+      nav.show { display: flex; }
+      .menu-toggle { display: block; }
+    }
+
+    /* ── Page Layout ── */
+    .page-wrapper {
+      padding-top: calc(var(--header-height) + 40px);
+      max-width: 1100px;
+      margin: 0 auto;
+      padding-left: 20px; padding-right: 20px;
+      padding-bottom: 80px;
+    }
+
+    .page-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3rem; color: var(--deep);
+      text-align: center; margin-bottom: 10px;
+    }
+    .page-subtitle {
+      text-align: center; color: #999; font-size: 14px;
+      margin-bottom: 40px; letter-spacing: 0.5px;
+    }
+
+    /* ── Cart Grid ── */
+    .cart-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 30px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .cart-layout { grid-template-columns: 1fr; }
+    }
+
+    /* ── Cart Items ── */
+    .cart-items-box {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(242,107,138,0.1);
+      overflow: hidden;
+    }
+    .cart-items-header {
+      background: var(--gradient);
+      color: #fff;
+      padding: 18px 24px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .clear-cart-btn {
+      background: rgba(255,255,255,0.2);
+      color: #fff; border: 1px solid rgba(255,255,255,0.4);
+      padding: 5px 14px; border-radius: 20px; font-size: 12px;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .clear-cart-btn:hover { background: rgba(255,255,255,0.35); }
+
+    #cart-items-list { padding: 10px 0; }
+
+    .cart-item {
+      display: flex; align-items: center; gap: 16px;
+      padding: 16px 24px;
+      border-bottom: 1px solid #fff0f5;
+      transition: background 0.2s;
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    .cart-item:last-child { border-bottom: none; }
+    .cart-item:hover { background: #fffafe; }
+
+    .cart-item-img {
+      width: 70px; height: 70px;
+      border-radius: 12px; object-fit: cover;
+      border: 2px solid #ffc7de;
+      flex-shrink: 0;
+    }
+    .cart-item-img-placeholder {
+      width: 70px; height: 70px; border-radius: 12px;
+      background: linear-gradient(135deg, #ffc7de, #ffdde8);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; flex-shrink: 0;
+    }
+
+    .cart-item-info { flex: 1; }
+    .cart-item-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; font-weight: 600; color: var(--deep);
+      margin-bottom: 4px;
+    }
+    .cart-item-price {
+      font-size: 13px; color: var(--accent); font-weight: 500;
+    }
+
+    .qty-controls {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .qty-btn {
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 1.5px solid #ffc7de; background: #fff;
+      color: var(--deep); font-size: 1rem; font-weight: bold;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .qty-btn:hover { background: var(--pink); border-color: var(--accent); }
+    .qty-display { font-weight: 600; font-size: 15px; min-width: 20px; text-align: center; }
+
+    .item-total { font-weight: 700; font-size: 14px; min-width: 50px; text-align: right; color: var(--deep); }
+
+    .remove-btn {
+      background: none; border: none; color: #ccc;
+      font-size: 1.1rem; cursor: pointer;
+      transition: color 0.2s;
+    }
+    .remove-btn:hover { color: crimson; }
+
+    /* ── Empty Cart ── */
+    #empty-cart-msg {
+      text-align: center; padding: 60px 20px;
+      display: none;
+    }
+    #empty-cart-msg .empty-icon { font-size: 4rem; margin-bottom: 16px; }
+    #empty-cart-msg h3 { font-family: 'Great Vibes', cursive; font-size: 2rem; color: var(--deep); margin-bottom: 8px; }
+    #empty-cart-msg p { color: #aaa; margin-bottom: 24px; }
+    .shop-link {
+      display: inline-block;
+      background: var(--gradient);
+      color: #fff; text-decoration: none;
+      padding: 12px 28px; border-radius: 30px;
+      font-weight: 600; font-size: 14px;
+      box-shadow: 0 4px 12px rgba(242,107,138,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .shop-link:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(242,107,138,0.4); }
+
+    /* ── Order Summary ── */
+    .order-summary {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(242,107,138,0.1);
+      overflow: hidden;
+      position: sticky; top: calc(var(--header-height) + 20px);
+    }
+    .summary-header {
+      background: var(--deep);
+      color: #fff; padding: 18px 24px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; letter-spacing: 1px;
+    }
+    .summary-body { padding: 24px; }
+
+    .summary-row {
+      display: flex; justify-content: space-between;
+      margin-bottom: 14px; font-size: 14px; color: #666;
+    }
+    .summary-row.total {
+      font-size: 1.1rem; font-weight: 700; color: var(--deep);
+      border-top: 2px solid #ffc7de; padding-top: 14px; margin-top: 6px;
+    }
+    .summary-row span:last-child { color: var(--accent); }
+    .summary-row.total span:last-child { color: var(--deep); font-size: 1.2rem; }
+
+    .shipping-note {
+      background: #fff0f5; border-radius: 12px;
+      padding: 12px 16px; font-size: 12px; color: #888;
+      margin-bottom: 20px; line-height: 1.6;
+      border-left: 3px solid var(--accent);
+    }
+    .shipping-note strong { color: var(--accent); }
+
+    /* ── Stripe Checkout Button ── */
+    #checkout-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--gradient);
+      color: #fff; border: none; border-radius: 16px;
+      font-size: 16px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(242,107,138,0.35);
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    #checkout-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(242,107,138,0.45);
+    }
+    #checkout-btn:disabled {
+      opacity: 0.5; cursor: not-allowed; transform: none;
+    }
+    #checkout-btn .spinner {
+      width: 18px; height: 18px;
+      border: 3px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .stripe-badge {
+      text-align: center; margin-top: 14px;
+      font-size: 12px; color: #bbb;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .stripe-badge .fas { color: #635bff; }
+
+    /* ── Setup Banner (shows when no Stripe key) ── */
+    #stripe-setup-banner {
+      background: linear-gradient(135deg, #635bff22, #8b5cf622);
+      border: 1px dashed #635bff88;
+      border-radius: 12px; padding: 16px; margin-bottom: 16px;
+      font-size: 12px; color: #635bff; line-height: 1.7;
+      display: none;
+    }
+    #stripe-setup-banner strong { display: block; font-size: 13px; margin-bottom: 6px; }
+    #stripe-setup-banner code {
+      background: rgba(99,91,255,0.1); padding: 2px 6px;
+      border-radius: 4px; font-family: monospace; font-size: 11px;
+    }
+
+    /* ── Promo Code ── */
+    .promo-row {
+      display: flex; gap: 8px; margin-bottom: 18px;
+    }
+    .promo-input {
+      flex: 1; padding: 10px 14px; border: 1.5px solid #ffc7de;
+      border-radius: 10px; font-size: 13px; outline: none;
+      transition: border-color 0.2s;
+    }
+    .promo-input:focus { border-color: var(--accent); }
+    .promo-apply-btn {
+      padding: 10px 14px; background: var(--pink);
+      border: none; border-radius: 10px; color: var(--deep);
+      font-weight: 600; font-size: 13px; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .promo-apply-btn:hover { background: #ffb3ce; }
+    #promo-msg { font-size: 12px; margin-bottom: 10px; height: 16px; }
+    #promo-msg.success { color: #4caf50; }
+    #promo-msg.error { color: crimson; }
+
+    /* ── Wishlist Banner ── */
+    #wishlist-count-wrapper { position: relative; display: inline-block; }
+    #wishlist-count-wrapper .fas.fa-heart { color: crimson; font-size: 20px; }
+    #wishlist-count-wrapper span {
+      position: absolute; top: -8px; right: 0;
+      background: crimson; color: #fff; font-size: 12px;
+      padding: 2px 6px; border-radius: 50%;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════════ -->
+  <header>
+    <img src="BJLOGO.png" alt="BibiJanelle Logo" />
+    <nav id="mobile-menu">
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="blog.html">Blog</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="wishlist.html" id="wishlist-count-wrapper">
+        <i class="fas fa-heart"></i>
+        <span id="wishlist-count">0</span>
+      </a>
+    </nav>
+    <div class="header-right">
+      <a href="cart.html" class="cart-header-btn active" title="View Cart">
+        <i class="fas fa-shopping-cart"></i>
+        <span id="cart-count-badge">0</span>
+      </a>
+      <i class="fas fa-bars menu-toggle" onclick="document.getElementById('mobile-menu').classList.toggle('show')"></i>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════
+       PAGE
+  ══════════════════════════════════════════ -->
+  <div class="page-wrapper">
+    <h1 class="page-title">Your Cart 🛍️</h1>
+    <p class="page-subtitle">Review your items before checking out</p>
+
+    <div class="cart-layout">
+
+      <!-- Left: Items -->
+      <div class="cart-items-box">
+        <div class="cart-items-header">
+          <span>🛒 Shopping Bag</span>
+          <button class="clear-cart-btn" onclick="clearCart()">Clear All</button>
+        </div>
+
+        <div id="empty-cart-msg">
+          <div class="empty-icon">🛍️</div>
+          <h3>Your bag is empty</h3>
+          <p>Looks like you haven't added anything yet!</p>
+          <a href="shop.html" class="shop-link">Continue Shopping →</a>
+        </div>
+
+        <div id="cart-items-list"></div>
+      </div>
+
+      <!-- Right: Summary -->
+      <div class="order-summary">
+        <div class="summary-header">✨ Order Summary</div>
+        <div class="summary-body">
+
+          <!-- Promo Code -->
+          <div class="promo-row">
+            <input type="text" class="promo-input" id="promo-input" placeholder="Promo code">
+            <button class="promo-apply-btn" onclick="applyPromo()">Apply</button>
+          </div>
+          <div id="promo-msg"></div>
+
+          <!-- Setup Banner (shown when Stripe not configured) -->
+          <div id="stripe-setup-banner">
+            <strong>⚙️ Stripe Setup Required</strong>
+            To enable real payments, replace <code>YOUR_STRIPE_PUBLISHABLE_KEY</code> in this file with your actual key from
+            <a href="https://dashboard.stripe.com/apikeys" target="_blank" style="color:#635bff">dashboard.stripe.com</a>.
+            You'll also need a backend to create Checkout Sessions — see the setup guide below.
+          </div>
+
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="subtotal-val">€0.00</span>
+          </div>
+          <div class="summary-row" id="discount-row" style="display:none; color:#4caf50;">
+            <span id="discount-label">Discount</span>
+            <span id="discount-val">-€0.00</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping</span>
+            <span id="shipping-val">Calculated at checkout</span>
+          </div>
+          <div class="summary-row total">
+            <span>Total</span>
+            <span id="total-val">€0.00</span>
+          </div>
+
+          <div class="shipping-note">
+            <strong>🚚 Free shipping</strong> on orders over €40!<br>
+            Standard delivery: 3–7 business days.
+          </div>
+
+          <button id="checkout-btn" onclick="startCheckout()" disabled>
+            <div class="spinner" id="checkout-spinner"></div>
+            <i class="fas fa-lock"></i>
+            <span id="checkout-btn-text">Checkout Securely</span>
+          </button>
+
+          <div class="stripe-badge">
+            <i class="fas fa-shield-alt"></i>
+            Powered by <strong style="color:#635bff; margin-left:3px;">Stripe</strong> · SSL Encrypted
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       STRIPE JS
+       Replace YOUR_STRIPE_PUBLISHABLE_KEY with
+       your key from https://dashboard.stripe.com
+  ══════════════════════════════════════════ -->
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <script>
+  // ════════════════════════════════════════════
+  // CONFIGURATION — edit these values
+  // ════════════════════════════════════════════
+  const STRIPE_PUBLISHABLE_KEY = "pk_live_51RfHrfKinNrafOu1xVDEeWTCgN5PsFbNfWWpt7foxBNXxL86wTDsqsKNwAKBXC853I1lbxWeDu9OjGHfnQZBpXan00fKQqTbVa";
+  // Your backend URL that creates a Stripe Checkout Session.
+  // See setup guide at the bottom of this file.
+  const CHECKOUT_BACKEND_URL = "YOUR_BACKEND_URL/create-checkout-session";
+
+  // Promo codes (add your own here)
+  const PROMO_CODES = {
+    "BIBI10":   { type: "percent", value: 10,  label: "10% off" },
+    "WELCOME5": { type: "flat",    value: 5,   label: "€5 off" },
+    "LOVE20":   { type: "percent", value: 20,  label: "20% off" },
+  };
+
+  // ════════════════════════════════════════════
+  // CART STATE
+  // ════════════════════════════════════════════
+  let appliedPromo = null;
+
+  function getCart() {
+    return JSON.parse(localStorage.getItem("bjCart")) || [];
+  }
+  function saveCart(cart) {
+    localStorage.setItem("bjCart", JSON.stringify(cart));
+    renderCart();
+    updateBadge();
+  }
+  function clearCart() {
+    if (!confirm("Remove all items from your cart?")) return;
+    localStorage.removeItem("bjCart");
+    appliedPromo = null;
+    document.getElementById("promo-input").value = "";
+    document.getElementById("promo-msg").textContent = "";
+    document.getElementById("discount-row").style.display = "none";
+    renderCart();
+    updateBadge();
+  }
+
+  function updateBadge() {
+    const cart = getCart();
+    const total = cart.reduce((s, i) => s + i.qty, 0);
+    const badge = document.getElementById("cart-count-badge");
+    if (badge) badge.textContent = total;
+  }
+
+  // ════════════════════════════════════════════
+  // RENDER CART
+  // ════════════════════════════════════════════
+  function renderCart() {
+    const cart = getCart();
+    const list = document.getElementById("cart-items-list");
+    const emptyMsg = document.getElementById("empty-cart-msg");
+    const checkoutBtn = document.getElementById("checkout-btn");
+
+    list.innerHTML = "";
+
+    if (cart.length === 0) {
+      emptyMsg.style.display = "block";
+      checkoutBtn.disabled = true;
+      updateTotals(0);
+      return;
+    }
+
+    emptyMsg.style.display = "none";
+    checkoutBtn.disabled = false;
+
+    cart.forEach((item, index) => {
+      const div = document.createElement("div");
+      div.className = "cart-item";
+
+      const imgHTML = item.img
+        ? `<img class="cart-item-img" src="${item.img}" alt="${item.name}" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`
+        : "";
+      const placeholderHTML = `<div class="cart-item-img-placeholder" ${item.img ? 'style="display:none"' : ""}>💎</div>`;
+
+      div.innerHTML = `
+        ${imgHTML}
+        ${placeholderHTML}
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-price">€${item.price.toFixed(2)} each</div>
+        </div>
+        <div class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(${index}, -1)">−</button>
+          <span class="qty-display">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
+        </div>
+        <div class="item-total">€${(item.price * item.qty).toFixed(2)}</div>
+        <button class="remove-btn" onclick="removeItem(${index})" title="Remove"><i class="fas fa-times"></i></button>
+      `;
+      list.appendChild(div);
+    });
+
+    const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    updateTotals(subtotal);
+  }
+
+  function changeQty(index, delta) {
+    let cart = getCart();
+    cart[index].qty = Math.max(1, cart[index].qty + delta);
+    saveCart(cart);
+  }
+
+  function removeItem(index) {
+    let cart = getCart();
+    cart.splice(index, 1);
+    saveCart(cart);
+  }
+
+  // ════════════════════════════════════════════
+  // TOTALS & PROMO
+  // ════════════════════════════════════════════
+  function updateTotals(subtotal) {
+    let discount = 0;
+    if (appliedPromo) {
+      if (appliedPromo.type === "percent") discount = subtotal * appliedPromo.value / 100;
+      else discount = Math.min(appliedPromo.value, subtotal);
+    }
+    const total = Math.max(0, subtotal - discount);
+
+    document.getElementById("subtotal-val").textContent = `€${subtotal.toFixed(2)}`;
+    document.getElementById("total-val").textContent = `€${total.toFixed(2)}`;
+
+    const shippingEl = document.getElementById("shipping-val");
+    if (subtotal === 0) shippingEl.textContent = "Calculated at checkout";
+    else if (subtotal >= 40) shippingEl.textContent = "FREE 🎉";
+    else shippingEl.textContent = "Calculated at checkout";
+
+    if (appliedPromo && discount > 0) {
+      document.getElementById("discount-row").style.display = "flex";
+      document.getElementById("discount-label").textContent = `Promo: ${appliedPromo.code}`;
+      document.getElementById("discount-val").textContent = `-€${discount.toFixed(2)}`;
+    }
+  }
+
+  function applyPromo() {
+    const code = document.getElementById("promo-input").value.trim().toUpperCase();
+    const msgEl = document.getElementById("promo-msg");
+
+    if (!code) { msgEl.className = "error"; msgEl.textContent = "Please enter a code."; return; }
+    if (!PROMO_CODES[code]) {
+      msgEl.className = "error"; msgEl.textContent = "Invalid promo code.";
+      appliedPromo = null;
+      document.getElementById("discount-row").style.display = "none";
+    } else {
+      appliedPromo = { ...PROMO_CODES[code], code };
+      msgEl.className = "success"; msgEl.textContent = `✓ ${PROMO_CODES[code].label} applied!`;
+    }
+    const cart = getCart();
+    const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    updateTotals(subtotal);
+  }
+
+  // ════════════════════════════════════════════
+  // STRIPE CHECKOUT
+  // ════════════════════════════════════════════
+  async function startCheckout() {
+    const btn = document.getElementById("checkout-btn");
+    const spinner = document.getElementById("checkout-spinner");
+    const btnText = document.getElementById("checkout-btn-text");
+
+    // Show if Stripe not configured
+    if (STRIPE_PUBLISHABLE_KEY === "pk_live_51RfHrfKinNrafOu1xVDEeWTCgN5PsFbNfWWpt7foxBNXxL86wTDsqsKNwAKBXC853I1lbxWeDu9OjGHfnQZBpXan00fKQqTbVa") {
+      document.getElementById("stripe-setup-banner").style.display = "block";
+      alert("⚙️ Stripe is not configured yet.\n\nReplace YOUR_STRIPE_PUBLISHABLE_KEY and YOUR_BACKEND_URL/create-checkout-session with your real values.\n\nSee the setup guide in the HTML comments.");
+      return;
+    }
+
+    const cart = getCart();
+    if (cart.length === 0) return;
+
+    btn.disabled = true;
+    spinner.style.display = "block";
+    btnText.textContent = "Redirecting...";
+
+    try {
+      // Call your backend to create a Checkout Session
+      const response = await fetch(CHECKOUT_BACKEND_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: cart.map(item => ({
+            name: item.name,
+            price: Math.round(item.price * 100), // cents
+            quantity: item.qty,
+            image: item.img,
+          })),
+          promoCode: appliedPromo ? appliedPromo.code : null,
+          currency: "eur",
+          success_url: window.location.origin + "/order-success.html",
+          cancel_url: window.location.origin + "/cart.html",
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.sessionId) {
+        throw new Error(data.error || "Could not create checkout session.");
+      }
+
+      // Redirect to Stripe Checkout
+      const stripe = Stripe(pk_live_51RfHrfKinNrafOu1xVDEeWTCgN5PsFbNfWWpt7foxBNXxL86wTDsqsKNwAKBXC853I1lbxWeDu9OjGHfnQZBpXan00fKQqTbVa);
+      const { error } = await stripe.redirectToCheckout({ sessionId: data.sessionId });
+      if (error) throw error;
+
+    } catch (err) {
+      console.error("Checkout error:", err);
+      alert("Something went wrong: " + err.message);
+      btn.disabled = false;
+      spinner.style.display = "none";
+      btnText.textContent = "Checkout Securely";
+    }
+  }
+
+  // ════════════════════════════════════════════
+  // WISHLIST COUNT
+  // ════════════════════════════════════════════
+  function updateWishlistBadge() {
+    const wl = JSON.parse(localStorage.getItem("wishlist")) || [];
+    const el = document.getElementById("wishlist-count");
+    if (el) el.textContent = wl.length;
+  }
+
+  // ════════════════════════════════════════════
+  // INIT
+  // ════════════════════════════════════════════
+  renderCart();
+  updateBadge();
+  updateWishlistBadge();
+  </script>
+
+  <!--
+  ════════════════════════════════════════════════════════════════
+  STRIPE BACKEND SETUP GUIDE
+  ════════════════════════════════════════════════════════════════
+
+  This page calls YOUR backend to create a Stripe Checkout Session.
+  Here's a minimal Node.js / Express example:
+
+  ── server.js ──────────────────────────────────────────────────
+
+  const express = require('express');
+  const stripe = require('stripe')('sk_live_YOUR_SECRET_KEY'); // ← your secret key
+  const cors = require('cors');
+
+  const app = express();
+  app.use(cors({ origin: 'https://yourdomain.com' })); // ← your site
+  app.use(express.json());
+
+  app.post('/create-checkout-session', async (req, res) => {
+    const { items, currency, success_url, cancel_url } = req.body;
+
+    const line_items = items.map(item => ({
+      price_data: {
+        currency: currency || 'eur',
+        product_data: {
+          name: item.name,
+          images: item.image ? [item.image] : [],
+        },
+        unit_amount: item.price, // already in cents
+      },
+      quantity: item.quantity,
+    }));
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items,
+      mode: 'payment',
+      success_url: success_url + '?session_id={CHECKOUT_SESSION_ID}',
+      cancel_url,
+      shipping_address_collection: { allowed_countries: ['IE', 'GB', 'DE', 'FR', 'US'] },
+    });
+
+    res.json({ sessionId: session.id });
+  });
+
+  app.listen(3000, () => console.log('Server running on port 3000'));
+
+  ── Steps ──────────────────────────────────────────────────────
+  1. npm install express stripe cors
+  2. Replace sk_live_YOUR_SECRET_KEY with your Stripe secret key
+  3. Deploy your server (Render.com, Railway, Heroku, or any host)
+  4. In cart.html replace:
+       STRIPE_PUBLISHABLE_KEY = "pk_live_YOUR_KEY"
+       CHECKOUT_BACKEND_URL   = "https://your-server.com/create-checkout-session"
+  5. Create order-success.html for the thank-you page
+
+  FREE hosting options for the backend:
+    • Render.com (free tier available)
+    • Railway.app
+    • Vercel (serverless functions)
+    • Netlify Functions
+
+  Stripe Dashboard: https://dashboard.stripe.com
+  ════════════════════════════════════════════════════════════════
+  -->
+
+</body>
+</html>

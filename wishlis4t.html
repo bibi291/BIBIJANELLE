@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wishlist – BibiJanelle</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+  <link rel="icon" href="ICON.png" type="image/png">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --header-height: 80px;
+      --pink: #ffc7de;
+      --deep: #4a2c2a;
+      --accent: #f26b8a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      font-family: 'Helvetica Neue', sans-serif;
+      background-color: #fff;
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      max-width: 100%;
+      height: var(--header-height);
+      background-color: var(--pink);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      z-index: 999;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    header img {
+      height: 50px; width: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--deep);
+    }
+
+    nav { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    nav a {
+      font-family: 'Great Vibes', cursive;
+      font-size: 1.2rem;
+      color: var(--deep);
+      text-decoration: none;
+      background: #fff;
+      padding: 6px 14px;
+      border-radius: 30px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: background .3s, color .3s;
+      white-space: nowrap;
+    }
+    nav a:hover { background: #fddde6; color: #000; }
+
+    .menu-toggle {
+      display: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: var(--deep);
+    }
+    .bag-icon {
+      display: none;
+      font-size: 1.6rem;
+      color: var(--deep);
+      margin-right: 20px;
+    }
+
+    #wishlist-count-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    #wishlist-count-wrapper .fas.fa-heart { color: crimson; font-size: 20px; }
+    #wishlist-count-wrapper span {
+      position: absolute;
+      top: -8px; right: 0;
+      background: crimson;
+      color: #fff;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 50%;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        position: absolute;
+        top: var(--header-height);
+        left: 0;
+        width: 100vw;
+        max-width: 100%;
+        flex-direction: column;
+        background: #ffe6f0;
+        display: none;
+        padding: 20px 0;
+        overflow-x: hidden;
+      }
+      nav.show { display: flex; }
+      nav a { width: calc(100% - 40px); margin: 0 20px; }
+      .menu-toggle { display: block; }
+      .bag-icon { display: block; }
+    }
+
+    /* ── PAGE BODY ── */
+    .page-content {
+      padding-top: calc(var(--header-height) + 30px);
+      padding-bottom: 60px;
+    }
+
+    .page-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.8rem;
+      color: var(--deep);
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+      text-align: center;
+      color: #999;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    /* ── WISHLIST GRID ── */
+    #wishlist-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 16px;
+      padding: 0 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    @media (min-width: 480px) {
+      #wishlist-section { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+    }
+    @media (min-width: 768px) {
+      #wishlist-section { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; }
+    }
+
+    /* ── WISHLIST CARD ── */
+    .wishlist-item {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      transition: transform .3s ease;
+      position: relative;
+    }
+    .wishlist-item:hover { transform: translateY(-5px); }
+
+    .wishlist-item img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Heart decoration corners */
+    .wishlist-item::before,
+    .wishlist-item::after {
+      content: '💖';
+      position: absolute;
+      font-size: 14px;
+      top: 8px;
+    }
+    .wishlist-item::before { left: 8px; }
+    .wishlist-item::after  { right: 8px; }
+
+    .item-info {
+      padding: 10px 12px 4px;
+    }
+    .item-info h5 {
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 2px;
+    }
+    .item-info h4 {
+      font-size: 15px;
+      color: var(--deep);
+      font-weight: 700;
+    }
+
+    .item-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px 12px;
+      gap: 8px;
+    }
+
+    /* WhatsApp inquire button — matches shop.html */
+    .inquire-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(90deg, #25d366, #128c7e);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 12px;
+      border-radius: 20px;
+      text-decoration: none;
+      box-shadow: 0 3px 8px rgba(18,140,126,0.3);
+      transition: transform .2s ease, box-shadow .2s ease;
+      border: none;
+      cursor: pointer;
+      flex: 1;
+      justify-content: center;
+    }
+    .inquire-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 12px rgba(18,140,126,0.4);
+    }
+
+    .remove-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #fff0f3;
+      color: crimson;
+      border: 1px solid crimson;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background .2s ease;
+      flex: 1;
+      justify-content: center;
+    }
+    .remove-btn:hover { background: #ffe0e6; }
+
+    /* ── EMPTY STATE ── */
+    .empty-msg {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      color: #aaa;
+      font-style: italic;
+      font-size: 16px;
+    }
+    .empty-msg a {
+      display: inline-block;
+      margin-top: 16px;
+      background: linear-gradient(90deg, #ff88ae, #ff6fcf);
+      color: #fff;
+      padding: 10px 28px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      font-style: normal;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <img src="BJLOGO.png" alt="Bibijanelle Logo" />
+    <nav id="mobile-menu">
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="blog.html">Blog</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a class="bart" href="wishlist.html" id="wishlist-count-wrapper">
+        <i class="fas fa-heart"></i>
+        <span id="wishlist-count">0</span>
+      </a>
+    </nav>
+    <div style="display: flex; align-items: center;">
+      <i class="fas fa-shopping-bag bag-icon"></i>
+      <i class="fas fa-bars menu-toggle" onclick="toggleMenu()"></i>
+    </div>
+  </header>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("mobile-menu").classList.toggle("show");
+    }
+  </script>
+
+  <div class="page-content">
+    <h1 class="page-title">My Wishlist</h1>
+    <p class="page-subtitle">Items you've saved ♡</p>
+
+    <section id="wishlist-section">
+      <!-- JS Populated -->
+    </section>
+  </div>
+
+  <script>
+    const WHATSAPP = "35399497904";
+
+    function getWishlist() {
+      return JSON.parse(localStorage.getItem("wishlist")) || [];
+    }
+
+    function saveWishlist(wishlist) {
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    }
+
+    function removeFromWishlist(id) {
+      saveWishlist(getWishlist().filter(p => p.id !== id));
+      renderWishlist();
+      updateCount();
+    }
+
+    function updateCount() {
+      document.getElementById("wishlist-count").textContent = getWishlist().length;
+    }
+
+    function renderWishlist() {
+      const section = document.getElementById("wishlist-section");
+      const wishlist = getWishlist();
+      section.innerHTML = "";
+
+      if (wishlist.length === 0) {
+        section.innerHTML = `
+          <div class="empty-msg">
+            Your wishlist is empty.<br>
+            <a href="shop.html">Browse the Shop</a>
+          </div>`;
+        return;
+      }
+
+      wishlist.forEach(product => {
+        const name = product.name || "Product";
+        const price = product.price || "";
+        const img = product.img || "";
+        const waMsg = encodeURIComponent(`Hi! I would like to purchase the ${name} (${price}).`);
+        const waLink = `https://wa.me/${WHATSAPP}?text=${waMsg}`;
+
+        const div = document.createElement("div");
+        div.className = "wishlist-item";
+        div.innerHTML = `
+          <img src="${img}" alt="${name}" onerror="this.src='IMAGES/placeholder.png'">
+          <div class="item-info">
+            <h5>${name}</h5>
+            <h4>${price}</h4>
+          </div>
+          <div class="item-actions">
+            <a class="inquire-btn" href="${waLink}" target="_blank">
+              <i class="fab fa-whatsapp"></i> Inquire
+            </a>
+            <button class="remove-btn" onclick="removeFromWishlist(${JSON.stringify(product.id)})">
+              <i class="fas fa-trash-alt"></i> Remove
+            </button>
+          </div>
+        `;
+        section.appendChild(div);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderWishlist();
+      updateCount();
+    });
+  </script>
+
+</body>
+</html>

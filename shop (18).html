@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BibiJanelle Shop</title>
+  <link rel="icon" href="ICON.PNG" type="image/png">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="pipi.js" async></script>
+  <script src="bibi.js" async></script>
+
+  <style>
+    :root {
+      --pink:      #ffc7de;
+      --deep:      #4a2c2a;
+      --accent:    #ff88ae;
+      --soft:      #fff0f5;
+      --header-h:  72px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #fff;
+      padding-top: var(--header-h);
+    }
+
+    /* ═══════════════════════════════
+       HEADER
+    ═══════════════════════════════ */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--header-h);
+      background: var(--pink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 1000;
+      box-shadow: 0 2px 12px rgba(74,44,42,.12);
+      gap: 16px;
+    }
+
+    header img.logo {
+      height: 46px; width: 46px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--deep);
+      flex-shrink: 0;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    nav a {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--deep);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 30px;
+      background: rgba(255,255,255,.7);
+      transition: background .25s, color .25s;
+      white-space: nowrap;
+    }
+    nav a:hover { background: #fff; color: #c0315a; }
+
+    /* Cart pill */
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+    }
+
+    .cart-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--deep);
+      color: #fff;
+      padding: 7px 16px 7px 12px;
+      border-radius: 40px;
+      text-decoration: none;
+      font-size: .85rem;
+      font-weight: 500;
+      letter-spacing: .3px;
+      transition: background .25s, transform .2s;
+      box-shadow: 0 3px 10px rgba(74,44,42,.25);
+    }
+    .cart-pill:hover { background: #6b3c3a; transform: translateY(-1px); }
+    .cart-pill i { font-size: 1rem; color: var(--pink); }
+    #cart-count-badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 20px; height: 20px;
+      border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 5px;
+    }
+
+    /* wishlist */
+    #wishlist-count-wrapper {
+      position: relative;
+      display: flex; align-items: center;
+      text-decoration: none;
+    }
+    #wishlist-count-wrapper .fa-heart { color: crimson; font-size: 1.2rem; }
+    #wishlist-count {
+      position: absolute; top: -7px; right: -9px;
+      background: crimson; color: #fff;
+      font-size: 10px; font-weight: 700;
+      min-width: 17px; height: 17px;
+      border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 3px;
+    }
+
+    .menu-toggle {
+      display: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: var(--deep);
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        position: fixed;
+        top: var(--header-h); left: 0; right: 0;
+        flex-direction: column;
+        background: #ffe6f0;
+        padding: 18px 0 22px;
+        display: none;
+        z-index: 999;
+        box-shadow: 0 6px 20px rgba(0,0,0,.12);
+        gap: 6px;
+      }
+      nav.show { display: flex; }
+      .menu-toggle { display: block; }
+      nav a { font-size: .95rem; padding: 9px 20px; }
+
+      .cart-pill span.label { display: none; }
+      .cart-pill { padding: 8px 12px; }
+    }
+
+    /* ═══════════════════════════════
+       SEARCH + FILTERS
+    ═══════════════════════════════ */
+    .shop-controls {
+      max-width: 900px;
+      margin: 28px auto 0;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+    .search-wrap i {
+      position: absolute; left: 16px; top: 50%;
+      transform: translateY(-50%);
+      color: #bbb;
+      font-size: .95rem;
+      pointer-events: none;
+    }
+    #searchInput {
+      width: 100%;
+      padding: 13px 16px 13px 42px;
+      border: 1.5px solid #e0c7d0;
+      border-radius: 40px;
+      font-size: .95rem;
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      background: var(--soft);
+      transition: border .2s, box-shadow .2s;
+      color: var(--deep);
+    }
+    #searchInput::placeholder { color: #c4a0b0; }
+    #searchInput:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(255,136,174,.18);
+      background: #fff;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-label {
+      font-size: .78rem;
+      font-weight: 500;
+      color: #a07080;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      white-space: nowrap;
+    }
+
+    .category-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .chip {
+      padding: 7px 16px;
+      border-radius: 30px;
+      border: 1.5px solid #e0c7d0;
+      background: var(--soft);
+      font-size: .83rem;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      color: var(--deep);
+      font-weight: 500;
+      transition: all .2s;
+      user-select: none;
+    }
+    .chip:hover { border-color: var(--accent); background: #fff0f7; color: #c0315a; }
+    .chip.active {
+      background: var(--deep);
+      border-color: var(--deep);
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(74,44,42,.2);
+    }
+
+    /* ═══════════════════════════════
+       PRODUCT GRID
+    ═══════════════════════════════ */
+    #product1 {
+      max-width: 1200px;
+      margin: 28px auto;
+      padding: 0 20px;
+    }
+    .pro-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 24px;
+    }
+
+    /* ── Product Card ── */
+    .pro {
+      border-radius: 18px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 4px 18px rgba(0,0,0,.07);
+      transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .35s;
+      position: relative;
+      cursor: default;
+    }
+    .pro:hover {
+      transform: scale(1.04) translateY(-4px);
+      box-shadow: 0 14px 36px rgba(74,44,42,.16);
+      z-index: 10;
+    }
+
+    /* ── Image Carousel ── */
+    .card-carousel {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: var(--soft);
+    }
+    .card-carousel .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity .45s ease;
+    }
+    .card-carousel .slide.active { opacity: 1; }
+    .card-carousel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Carousel dots */
+    .carousel-dots {
+      position: absolute;
+      bottom: 8px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 5px;
+      opacity: 0;
+      transition: opacity .25s;
+    }
+    .pro:hover .carousel-dots { opacity: 1; }
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.6);
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+    .dot.active {
+      background: #fff;
+      transform: scale(1.3);
+    }
+
+    /* Arrow buttons */
+    .carousel-btn {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,.85);
+      border: none;
+      border-radius: 50%;
+      width: 30px; height: 30px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .75rem;
+      color: var(--deep);
+      opacity: 0;
+      transition: opacity .25s, background .2s;
+      z-index: 5;
+      box-shadow: 0 2px 8px rgba(0,0,0,.15);
+    }
+    .carousel-btn.prev { left: 8px; }
+    .carousel-btn.next { right: 8px; }
+    .pro:hover .carousel-btn { opacity: 1; }
+    .carousel-btn:hover { background: #fff; }
+
+    /* Status flags */
+    .status-flag {
+      position: absolute;
+      top: 10px; left: 10px;
+      padding: 4px 9px;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 6px;
+      z-index: 10;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,.2);
+    }
+    .status-flag.new-flag   { background: #e04070; }
+    .status-flag.sold-out   { background: #999; }
+    .status-flag.popular    { background: #f5a623; }
+    .status-flag.limited    { background: #8b5cf6; }
+
+    /* ── Card Body ── */
+    .card-body {
+      padding: 12px 14px 6px;
+    }
+    .card-body .tag {
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: #c4a0b0;
+      font-weight: 500;
+    }
+    .card-body h5 {
+      font-family: 'Playfair Display', serif;
+      font-size: .98rem;
+      color: var(--deep);
+      margin: 3px 0 6px;
+      line-height: 1.3;
+    }
+    .card-body .price {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #c0315a;
+    }
+
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px 12px;
+    }
+
+    .add-to-cart-btn {
+      flex: 1;
+      padding: 9px 0;
+      background: linear-gradient(90deg, #ff88ae, #ff6fcf);
+      color: white;
+      font-weight: 600;
+      font-size: .82rem;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(255,136,174,.3);
+      transition: transform .2s, box-shadow .2s, background .25s;
+    }
+    .add-to-cart-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 14px rgba(255,136,174,.45);
+    }
+    .add-to-cart-btn.added {
+      background: linear-gradient(90deg, #4caf50, #81c784);
+    }
+
+    .wishlist-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      display: flex; align-items: center;
+    }
+    .wishlist-btn i { color: #ddd; font-size: 1.1rem; transition: color .25s, transform .2s; }
+    .wishlist-btn i.active { color: crimson; }
+    .wishlist-btn:hover i { transform: scale(1.2); color: crimson; }
+
+    /* ═══════════════════════════════
+       TOAST
+    ═══════════════════════════════ */
+    #cart-toast {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      background: var(--deep);
+      color: #fff;
+      padding: 12px 22px;
+      border-radius: 40px;
+      font-size: .88rem;
+      font-weight: 600;
+      box-shadow: 0 6px 20px rgba(0,0,0,.22);
+      opacity: 0;
+      transform: translateY(16px);
+      transition: all .3s ease;
+      z-index: 9999;
+      pointer-events: none;
+    }
+    #cart-toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ═══════════════════════════════
+       PAGINATION
+    ═══════════════════════════════ */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 24px 0 40px;
+      flex-wrap: wrap;
+    }
+    .pagination button {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid #e0c7d0;
+      background: var(--soft);
+      color: var(--deep);
+      font-size: .88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .pagination button.active,
+    .pagination button:hover {
+      background: var(--deep);
+      border-color: var(--deep);
+      color: #fff;
+    }
+
+    /* ═══════════════════════════════
+       NEWSLETTER
+    ═══════════════════════════════ */
+    #newsletter {
+      background: var(--soft);
+      padding: 48px 24px;
+      text-align: center;
+    }
+    .newsletter-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 20px;
+      justify-content: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .newstext h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--deep);
+    }
+    .newstext p span { color: var(--accent); font-weight: 600; }
+    .email-input {
+      padding: 11px 18px;
+      border: 1.5px solid #e0c7d0;
+      border-radius: 30px;
+      font-size: .9rem;
+      outline: none;
+      min-width: 220px;
+      background: #fff;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .email-input:focus { border-color: var(--accent); }
+    .subscribe-btn {
+      padding: 11px 26px;
+      background: linear-gradient(90deg, #ff88ae, #ff6fcf);
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .subscribe-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(255,136,174,.4); }
+
+    @media (max-width: 480px) {
+      .pro-container { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .card-body h5 { font-size: .88rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════════ -->
+  <header>
+    <img class="logo" src="BJLOGO.png" alt="BibiJanelle Logo" />
+
+    <nav id="mobile-menu">
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="blog.html">Blog</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+    <div class="header-right">
+      <a href="wishlist.html" id="wishlist-count-wrapper" title="Wishlist">
+        <i class="fas fa-heart"></i>
+        <span id="wishlist-count">0</span>
+      </a>
+
+      <a href="cart.html" class="cart-pill" title="View Cart">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="label">Cart</span>
+        <span id="cart-count-badge">0</span>
+      </a>
+
+      <button class="menu-toggle" onclick="toggleMenu()" aria-label="Menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <div id="cart-toast">✓ Added to cart!</div>
+
+  <!-- ══════════════════════════════════════════
+       SEARCH + FILTERS
+  ══════════════════════════════════════════ -->
+  <div class="shop-controls">
+    <div class="search-wrap">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="Search for jewellery, bags…">
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">Category</span>
+      <div class="category-chips">
+        <button class="chip active" data-cat="">All</button>
+        <button class="chip" data-cat="NECKLACE">Necklaces</button>
+        <button class="chip" data-cat="BRACELET">Bracelets</button>
+        <button class="chip" data-cat="EARRINGS">Earrings</button>
+        <button class="chip" data-cat="COASTER">Coasters</button>
+        <button class="chip" data-cat="BAG">Bags</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PRODUCTS
+  ══════════════════════════════════════════ -->
+  <section id="product1">
+    <div class="pro-container">
+
+      <!-- NECKLACES -->
+      <div class="pro" data-color="NECKLACE" data-price="10" data-name="Midnight Onyx Necklace">
+        <div class="card-carousel" data-images='["IMAGES/A1.png","IMAGES/A1a.png"]'>
+          <div class="status-flag new-flag">🔥 New</div>
+        </div>
+        <div class="card-body">
+          <span class="tag">Classic</span>
+          <h5>Midnight Onyx Necklace</h5>
+          <span class="price">€10</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/A1.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="NECKLACE" data-price="10" data-name="Sky Whisper Necklace">
+        <div class="card-carousel" data-images='["IMAGES/A2.png"]'></div>
+        <div class="card-body">
+          <span class="tag">Red</span>
+          <h5>Sky Whisper Necklace</h5>
+          <span class="price">€10</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/A2.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="NECKLACE" data-price="10" data-name="Crystal Garden Necklace Set">
+        <div class="card-carousel" data-images='["IMAGES/A3.png"]'>
+          <div class="status-flag sold-out">Sold Out</div>
+        </div>
+        <div class="card-body">
+          <span class="tag">Pretty</span>
+          <h5>Crystal Garden Necklace Set</h5>
+          <span class="price">€10</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/A3.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="NECKLACE" data-price="10" data-name="Silver Teardrop Necklace Set">
+        <div class="card-carousel" data-images='["IMAGES/A4.png"]'>
+          <div class="status-flag sold-out">Sold Out</div>
+        </div>
+        <div class="card-body">
+          <span class="tag">Elegant</span>
+          <h5>Silver Teardrop Necklace Set</h5>
+          <span class="price">€10</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/A4.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="NECKLACE" data-price="10" data-name="Red Ember Necklace">
+        <div class="card-carousel" data-images='["IMAGES/A5.png"]'></div>
+        <div class="card-body">
+          <span class="tag">Vibrant</span>
+          <h5>Red Ember Necklace</h5>
+          <span class="price">€10</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/A5.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="NECKLACE" data-price="10" data-name="Blush Coral Necklace">
+        <div class="card-carousel" data-images='["IMAGES/A6.png"]'></div>
+        <div class="card-body">
+          <span class="tag">Pretty</span>
+          <h5>Blush Coral Necklace</h5>
+          <span class="price">€10</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/A6.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="NECKLACE" data-price="10" data-name="Mint Serenity Necklace">
+        <div class="card-carousel" data-images='["IMAGES/A7.png"]'></div>
+        <div class="card-body">
+          <span class="tag">Vibrant</span>
+          <h5>Mint Serenity Necklace</h5>
+          <span class="price">€10</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/A7.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="NECKLACE" data-price="10" data-name="Deep Sea Sparkle Necklace">
+        <div class="card-carousel" data-images='["IMAGES/A8.png","IMAGES/A8a.png"]'></div>
+        <div class="card-body">
+          <span class="tag">Pretty</span>
+          <h5>Deep Sea Sparkle Necklace</h5>
+          <span class="price">€10</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/A8.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="NECKLACE" data-price="15" data-name="Emerald Grace Jewelry Set">
+        <div class="card-carousel" data-images='["IMAGES/A9.png","IMAGES/A9a.png"]'></div>
+        <div class="card-body">
+          <span class="tag">Elegant</span>
+          <h5>Emerald Grace Jewelry Set</h5>
+          <span class="price">€15</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/A9.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="NECKLACE" data-price="20" data-name="Pearl Necklace">
+        <div class="card-carousel" data-images='["IMAGES/A10.png"]'></div>
+        <div class="card-body">
+          <span class="tag">Classic</span>
+          <h5>Pearl Necklace</h5>
+          <span class="price">€20</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/A10.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="NECKLACE" data-price="15" data-name="Coral Necklace">
+        <div class="card-carousel" data-images='["IMAGES/A11.png"]'></div>
+        <div class="card-body">
+          <span class="tag">Classic</span>
+          <h5>Coral Necklace</h5>
+          <span class="price">€15</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/A11.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <!-- BRACELETS -->
+      <div class="pro" data-color="BRACELET" data-price="5" data-name="Lime Bead Loop Bracelet">
+        <div class="card-carousel" data-images='["IMAGES/B1.png","IMAGES/B1a.png"]'></div>
+        <div class="card-body">
+          <span class="tag">Pretty</span>
+          <h5>Lime Bead Loop Bracelet</h5>
+          <span class="price">€5</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/B1.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="BRACELET" data-price="5" data-name="Berry Bracelet">
+        <div class="card-carousel" data-images='["IMAGES/B2.png"]'>
+          <div class="status-flag popular">⭐ Popular</div>
+        </div>
+        <div class="card-body">
+          <span class="tag">Vibrant</span>
+          <h5>Berry Bracelet</h5>
+          <span class="price">€5</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/B2.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="BRACELET" data-price="5" data-name="Berry Bracelet (Limited)">
+        <div class="card-carousel" data-images='["IMAGES/B3.png"]'>
+          <div class="status-flag limited">💎 Limited</div>
+        </div>
+        <div class="card-body">
+          <span class="tag">Vibrant</span>
+          <h5>Berry Bracelet (Limited)</h5>
+          <span class="price">€5</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/B3.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="BRACELET" data-price="5" data-name="Peppermint Pop Bracelet">
+        <div class="card-carousel" data-images='["IMAGES/B4.png"]'></div>
+        <div class="card-body">
+          <span class="tag">Pretty</span>
+          <h5>Peppermint Pop Bracelet</h5>
+          <span class="price">€5</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/B4.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="BRACELET" data-price="5" data-name="Ocean Breeze Bracelet">
+        <div class="card-carousel" data-images='["IMAGES/B5.png"]'></div>
+        <div class="card-body">
+          <span class="tag">Vibrant</span>
+          <h5>Ocean Breeze Bracelet</h5>
+          <span class="price">€5</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/B5.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="BRACELET" data-price="5" data-name="Lemon Blush Bracelet">
+        <div class="card-carousel" data-images='["IMAGES/B6.png"]'></div>
+        <div class="card-body">
+          <span class="tag">Vibrant</span>
+          <h5>Lemon Blush Bracelet</h5>
+          <span class="price">€5</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/B6.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="BRACELET" data-price="8" data-name="Pearl Elegance Bracelet">
+        <div class="card-carousel" data-images='["IMAGES/B7.png"]'></div>
+        <div class="card-body">
+          <span class="tag">Elegant</span>
+          <h5>Pearl Elegance Bracelet</h5>
+          <span class="price">€8</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/B7.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="BRACELET" data-price="8" data-name="Turquoise Twilight Bracelet">
+        <div class="card-carousel" data-images='["IMAGES/B8.png"]'></div>
+        <div class="card-body">
+          <span class="tag">Pretty</span>
+          <h5>Turquoise Twilight Bracelet</h5>
+          <span class="price">€8</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/B8.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="BRACELET" data-price="8" data-name="Bracelet">
+        <div class="card-carousel" data-images='["IMAGES/B9.png"]'></div>
+        <div class="card-body">
+          <span class="tag">Classic</span>
+          <h5>Bracelet</h5>
+          <span class="price">€8</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/B9.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="BRACELET" data-price="8" data-name="Cherry Dusk Bracelet">
+        <div class="card-carousel" data-images='["IMAGES/b10.png"]'></div>
+        <div class="card-body">
+          <span class="tag">Classic</span>
+          <h5>Cherry Dusk Bracelet</h5>
+          <span class="price">€8</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/b10.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <!-- COASTERS -->
+      <div class="pro" data-color="COASTER" data-price="12" data-name="Brown and Gold Coaster">
+        <div class="card-carousel" data-images='["IMAGES/C1.png"]'>
+          <div class="status-flag limited">💎 Limited</div>
+        </div>
+        <div class="card-body">
+          <span class="tag">Vibrant</span>
+          <h5>Brown and Gold Coaster</h5>
+          <span class="price">€12</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/C1.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <div class="pro" data-color="COASTER" data-price="12" data-name="Gold Coaster">
+        <div class="card-carousel" data-images='["IMAGES/C2.png"]'>
+          <div class="status-flag limited">💎 Limited</div>
+        </div>
+        <div class="card-body">
+          <span class="tag">Vibrant</span>
+          <h5>Gold Coaster</h5>
+          <span class="price">€12</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/C2.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+      <!-- BAG -->
+      <div class="pro" data-color="BAG" data-price="35" data-name="Red Beaded Bag">
+        <div class="card-carousel" data-images='["IMAGES/D1.png"]'></div>
+        <div class="card-body">
+          <span class="tag">Classic</span>
+          <h5>Red Beaded Bag</h5>
+          <span class="price">€35</span>
+        </div>
+        <div class="card-actions">
+          <button class="add-to-cart-btn" data-img="IMAGES/D1.png" onclick="addToCart(this)">Add to Cart</button>
+          <button class="wishlist-btn"><i class="fas fa-heart"></i></button>
+        </div>
+      </div>
+
+    </div><!-- /pro-container -->
+    <div class="pagination" id="pagination"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       NEWSLETTER
+  ══════════════════════════════════════════ -->
+  <section id="newsletter">
+    <div class="newsletter-container">
+      <div class="newstext">
+        <h4>Sign Up for Our Newsletter</h4>
+        <p>Get email updates about our latest shop items and <span>exclusive offers</span>.</p>
+      </div>
+      <div id="mc_embed_signup">
+        <form action="https://app.us20.list-manage.com/subscribe/post?u=aa7b08830b448e4fd9b2ae7dc&amp;id=d9c77e66f6&amp;f_id=00e382e0f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
+          <div id="mc_embed_signup_scroll" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+            <input type="email" value="" name="EMAIL" class="email-input required email" id="mce-EMAIL" placeholder="Enter your email" required>
+            <div aria-hidden="true" style="position:absolute;left:-5000px;">
+              <input type="text" name="b_aa7b08830b448e4fd9b2ae7dc_d9c77e66f6" tabindex="-1" value="">
+            </div>
+            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="subscribe-btn button">
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SCRIPTS
+  ══════════════════════════════════════════ -->
+  <script>
+    // ── Mobile Menu ──
+    function toggleMenu() {
+      document.getElementById("mobile-menu").classList.toggle("show");
+    }
+
+    // ── Cart ──
+    function getCart() { return JSON.parse(localStorage.getItem("bjCart")) || []; }
+    function saveCart(c) { localStorage.setItem("bjCart", JSON.stringify(c)); updateCartBadge(); }
+    function updateCartBadge() {
+      const total = getCart().reduce((s, i) => s + i.qty, 0);
+      const b = document.getElementById("cart-count-badge");
+      if (b) b.textContent = total;
+    }
+    function addToCart(btn) {
+      const pro = btn.closest(".pro");
+      const name  = pro.dataset.name;
+      const price = parseFloat(pro.dataset.price);
+      const img   = btn.dataset.img;
+      let cart = getCart();
+      const ex = cart.find(i => i.name === name);
+      if (ex) ex.qty++; else cart.push({ name, price, img, qty: 1 });
+      saveCart(cart);
+      btn.textContent = "✓ Added!";
+      btn.classList.add("added");
+      setTimeout(() => { btn.textContent = "Add to Cart"; btn.classList.remove("added"); }, 1500);
+      const toast = document.getElementById("cart-toast");
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+    updateCartBadge();
+
+    // ── Build Carousels ──
+    document.querySelectorAll(".card-carousel").forEach(carousel => {
+      const images = JSON.parse(carousel.dataset.images || '[]');
+      if (!images.length) return;
+
+      // Create slides
+      images.forEach((src, i) => {
+        const slide = document.createElement("div");
+        slide.className = "slide" + (i === 0 ? " active" : "");
+        const img = document.createElement("img");
+        img.src = src; img.alt = "";
+        slide.appendChild(img);
+        carousel.appendChild(slide);
+      });
+
+      if (images.length < 2) return;
+
+      // Arrows
+      const prev = document.createElement("button");
+      prev.className = "carousel-btn prev"; prev.innerHTML = '<i class="fas fa-chevron-left"></i>';
+      const next = document.createElement("button");
+      next.className = "carousel-btn next"; next.innerHTML = '<i class="fas fa-chevron-right"></i>';
+      carousel.appendChild(prev); carousel.appendChild(next);
+
+      // Dots
+      const dotsWrap = document.createElement("div");
+      dotsWrap.className = "carousel-dots";
+      images.forEach((_, i) => {
+        const dot = document.createElement("span");
+        dot.className = "dot" + (i === 0 ? " active" : "");
+        dot.addEventListener("click", e => { e.stopPropagation(); goTo(i); });
+        dotsWrap.appendChild(dot);
+      });
+      carousel.appendChild(dotsWrap);
+
+      let current = 0;
+      const slides = carousel.querySelectorAll(".slide");
+      const dots   = dotsWrap.querySelectorAll(".dot");
+
+      function goTo(idx) {
+        slides[current].classList.remove("active");
+        dots[current].classList.remove("active");
+        current = (idx + images.length) % images.length;
+        slides[current].classList.add("active");
+        dots[current].classList.add("active");
+      }
+
+      prev.addEventListener("click", e => { e.stopPropagation(); goTo(current - 1); });
+      next.addEventListener("click", e => { e.stopPropagation(); goTo(current + 1); });
+
+      // Auto-advance on hover
+      let timer;
+      const card = carousel.closest(".pro");
+      card.addEventListener("mouseenter", () => { timer = setInterval(() => goTo(current + 1), 1400); });
+      card.addEventListener("mouseleave", () => clearInterval(timer));
+    });
+
+    // ── Wishlist ──
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    function updateWishlistCount() {
+      const el = document.getElementById("wishlist-count");
+      if (el) el.textContent = wishlist.length;
+    }
+    document.querySelectorAll(".wishlist-btn").forEach((btn, idx) => {
+      const pro = btn.closest(".pro");
+      const id  = pro.dataset.name || "p-" + idx;
+      const icon = btn.querySelector("i");
+      if (wishlist.some(p => p.id === id)) icon.classList.add("active");
+      btn.addEventListener("click", () => {
+        if (wishlist.some(p => p.id === id)) {
+          wishlist = wishlist.filter(p => p.id !== id);
+          icon.classList.remove("active");
+        } else {
+          wishlist.push({ id, name: pro.dataset.name, img: btn.closest(".card-actions").querySelector(".add-to-cart-btn").dataset.img });
+          icon.classList.add("active");
+        }
+        localStorage.setItem("wishlist", JSON.stringify(wishlist));
+        updateWishlistCount();
+      });
+    });
+    updateWishlistCount();
+
+    // ── Category Chips ──
+    document.querySelectorAll(".chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        showPage(1, getFilteredProducts());
+      });
+    });
+
+    // ── Search ──
+    document.getElementById("searchInput").addEventListener("input", () => showPage(1, getFilteredProducts()));
+
+    // ── Filtering ──
+    function getFilteredProducts() {
+      const q   = document.getElementById("searchInput").value.toLowerCase();
+      const cat = document.querySelector(".chip.active").dataset.cat;
+      return Array.from(document.querySelectorAll(".pro")).filter(p => {
+        const name = p.dataset.name.toLowerCase();
+        const col  = p.dataset.color;
+        return name.includes(q) && (!cat || col === cat);
+      });
+    }
+
+    // ── Pagination ──
+    const PER_PAGE = 6;
+    let currentPage = 1;
+
+    function showPage(page, products) {
+      const start = (page - 1) * PER_PAGE;
+      document.querySelectorAll(".pro").forEach(p => p.style.display = "none");
+      products.slice(start, start + PER_PAGE).forEach(p => p.style.display = "block");
+      currentPage = page;
+      renderPagination(products.length);
+    }
+
+    function renderPagination(total) {
+      const pag = document.getElementById("pagination");
+      const pages = Math.ceil(total / PER_PAGE);
+      pag.innerHTML = "";
+      for (let i = 1; i <= pages; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = i;
+        if (i === currentPage) btn.classList.add("active");
+        btn.addEventListener("click", () => showPage(i, getFilteredProducts()));
+        pag.appendChild(btn);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => showPage(1, getFilteredProducts()));
+    // Fallback for scripts loaded async
+    if (document.readyState !== "loading") showPage(1, getFilteredProducts());
+  </script>
+</body>
+</html>
