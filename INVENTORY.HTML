@@ -182,7 +182,7 @@
   .swatch{width:12px;height:12px;border-radius:50%;display:inline-block;margin-right:5px;border:1px solid rgba(0,0,0,.1);vertical-align:-1px;}
   .physical-pill{font-size:10.5px;padding:2px 8px;border-radius:20px;background:var(--gold);color:#fff;position:absolute;top:8px;left:8px;}
 
-  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
+  .stat-row{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:28px;}
   .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;}
   .stat .label{font-size:12px;color:var(--ink-soft);}
   .stat .value{font-family:'Fraunces',serif;font-size:24px;margin-top:4px;}
@@ -212,6 +212,7 @@
       <button class="nav-btn" data-page="jewelry"><span class="dot"></span>Jewelry</button>
       <button class="nav-btn" data-page="sales"><span class="dot"></span>Sales</button>
       <button class="nav-btn" data-page="dashboard"><span class="dot"></span>Dashboard</button>
+      <button class="nav-btn" data-page="notes"><span class="dot"></span>Notes</button>
     </nav>
   </aside>
 
@@ -247,6 +248,8 @@
           <option value="earrings">Earrings</option>
           <option value="bag">Bag</option>
           <option value="coaster">Coaster</option>
+          <option value="keyholder">Keyholder</option>
+          <option value="accessory">Accessory</option>
           <option value="other">Other</option>
         </select>
         <select id="filter-color" onchange="renderJewelry()">
@@ -289,6 +292,21 @@
       </div>
     </section>
 
+    <!-- NOTES -->
+    <section class="page" id="page-notes">
+      <div class="page-head">
+        <div>
+          <h1>Notes</h1>
+          <p>Anything rough — reminders, ideas, things to follow up on.</p>
+        </div>
+      </div>
+      <div class="field" style="margin-bottom:16px;">
+        <textarea id="note-input" rows="3" placeholder="Jot something down..." style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-family:'Inter',sans-serif;font-size:13.5px;resize:vertical;background:#fff;color:var(--ink);"></textarea>
+        <div style="margin-top:8px;"><button class="primary" onclick="addNote()">Add note</button></div>
+      </div>
+      <div id="notes-list-wrap"></div>
+    </section>
+
   </main>
 </div>
 
@@ -307,6 +325,12 @@
       <div class="field"><label>Price per piece (€)</label><input type="number" id="material-unitprice" min="0" step="0.01"></div>
     </div>
     <div class="field"><label>Restock when quantity falls below</label><input type="number" id="material-reorder" min="0" step="1" placeholder="e.g. 10"></div>
+    <div class="field">
+      <label>Photo</label>
+      <input type="file" id="material-image-input" accept="image/*" onchange="handleMaterialImageUpload(event)">
+      <input type="hidden" id="material-image">
+      <div id="material-image-preview" style="margin-top:8px;"></div>
+    </div>
     <div class="modal-actions">
       <button class="ghost" onclick="closeModal('material-modal')">Cancel</button>
       <button class="primary" onclick="saveMaterial()">Save material</button>
@@ -329,13 +353,19 @@
           <option value="earrings">Earrings</option>
           <option value="bag">Bag</option>
           <option value="coaster">Coaster</option>
+          <option value="keyholder">Keyholder</option>
+          <option value="accessory">Accessory</option>
           <option value="other">Other</option>
         </select>
       </div>
       <div class="field"><label>Color</label><input type="text" id="jewelry-color" placeholder="e.g. Terracotta"></div>
     </div>
     <div class="row2">
-      <div class="field"><label>Price (€)</label><input type="number" id="jewelry-price" min="0" step="0.01"></div>
+      <div class="field"><label>Price (€)</label><input type="number" id="jewelry-price" min="0" step="0.01" oninput="updateProfitPreview()"></div>
+      <div class="field"><label>Cost to make (€)</label><input type="number" id="jewelry-cost" min="0" step="0.01" oninput="updateProfitPreview()"></div>
+    </div>
+    <p id="profit-preview" style="font-size:12.5px;color:var(--ink-soft);margin:-6px 0 14px;"></p>
+    <div class="row2">
       <div class="field">
         <label>Physical piece with you?</label>
         <select id="jewelry-physical">
@@ -392,7 +422,7 @@
 </div>
 
 <script>
-let state = { materials: [], jewelry: [], sales: [] };
+let state = { materials: [], jewelry: [], sales: [], notes: [] };
 let editingMaterialId = null;
 let editingJewelryId = null;
 let monthlyChart = null;
@@ -404,6 +434,7 @@ async function loadData(){
     const res = await window.storage.get(STORAGE_KEY, false);
     if(res && res.value){
       state = JSON.parse(res.value);
+      if(!state.notes) state.notes = [];
     }
   }catch(e){
     console.log('No saved data yet, starting fresh.');
@@ -439,6 +470,7 @@ function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 function openMaterialModal(id){
   editingMaterialId = id || null;
   document.getElementById('material-modal-title').textContent = id ? 'Edit material' : 'Add material';
+  document.getElementById('material-image-preview').innerHTML = '';
   if(id){
     const m = state.materials.find(x=>x.id===id);
     document.getElementById('material-name').value = m.name;
@@ -447,11 +479,36 @@ function openMaterialModal(id){
     document.getElementById('material-quantity').value = m.quantity;
     document.getElementById('material-unitprice').value = m.unitPrice;
     document.getElementById('material-reorder').value = m.reorderPoint;
+    document.getElementById('material-image').value = m.image || '';
+    if(m.image) document.getElementById('material-image-preview').innerHTML = `<img src="${m.image}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;">`;
   } else {
-    ['material-name','material-supplier','material-quantity','material-unitprice','material-reorder'].forEach(f=>document.getElementById(f).value='');
+    ['material-name','material-supplier','material-quantity','material-unitprice','material-reorder','material-image'].forEach(f=>document.getElementById(f).value='');
     document.getElementById('material-date').value = new Date().toISOString().slice(0,10);
   }
   document.getElementById('material-modal').classList.add('open');
+}
+
+function handleMaterialImageUpload(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    const img = new Image();
+    img.onload = function(){
+      const maxW = 400;
+      const scale = Math.min(1, maxW/img.width);
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width*scale;
+      canvas.height = img.height*scale;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img,0,0,canvas.width,canvas.height);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+      document.getElementById('material-image').value = dataUrl;
+      document.getElementById('material-image-preview').innerHTML = `<img src="${dataUrl}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;">`;
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
 }
 
 function saveMaterial(){
@@ -464,6 +521,7 @@ function saveMaterial(){
     quantity: Number(document.getElementById('material-quantity').value) || 0,
     unitPrice: Number(document.getElementById('material-unitprice').value) || 0,
     reorderPoint: Number(document.getElementById('material-reorder').value) || 0,
+    image: document.getElementById('material-image').value,
   };
   if(editingMaterialId){
     const m = state.materials.find(x=>x.id===editingMaterialId);
@@ -492,7 +550,11 @@ function renderMaterials(){
   }
   const rows = state.materials.map(m=>{
     const low = m.quantity <= m.reorderPoint;
+    const thumb = m.image
+      ? `<img src="${m.image}" alt="" style="width:38px;height:38px;object-fit:cover;border-radius:6px;">`
+      : `<div style="width:38px;height:38px;border-radius:6px;background:var(--sage-bg);"></div>`;
     return `<tr>
+      <td>${thumb}</td>
       <td>${escapeHtml(m.name)}</td>
       <td>${m.dateBought||'—'}</td>
       <td>${escapeHtml(m.supplier)||'—'}</td>
@@ -503,7 +565,7 @@ function renderMaterials(){
     </tr>`;
   }).join('');
   wrap.innerHTML = `<table>
-    <thead><tr><th>Material</th><th>Date bought</th><th>Bought from</th><th>Qty</th><th>Price / piece</th><th>Stock</th><th></th></tr></thead>
+    <thead><tr><th></th><th>Material</th><th>Date bought</th><th>Bought from</th><th>Qty</th><th>Price / piece</th><th>Stock</th><th></th></tr></thead>
     <tbody>${rows}</tbody>
   </table>`;
 }
@@ -566,17 +628,26 @@ function openJewelryModal(id){
     document.getElementById('jewelry-category').value = j.category;
     document.getElementById('jewelry-color').value = j.color;
     document.getElementById('jewelry-price').value = j.price;
+    document.getElementById('jewelry-cost').value = j.cost || '';
     document.getElementById('jewelry-physical').value = j.hasPhysical ? 'yes':'no';
     document.getElementById('jewelry-image').value = j.image || '';
     if(j.image) document.getElementById('image-preview').innerHTML = `<img src="${j.image}" style="width:100px;height:100px;object-fit:cover;border-radius:8px;">`;
     renderMaterialPicker(j.materials);
   } else {
-    ['jewelry-name','jewelry-color','jewelry-price','jewelry-image'].forEach(f=>document.getElementById(f).value='');
+    ['jewelry-name','jewelry-color','jewelry-price','jewelry-cost','jewelry-image'].forEach(f=>document.getElementById(f).value='');
     document.getElementById('jewelry-category').value = 'necklace';
     document.getElementById('jewelry-physical').value = 'yes';
     renderMaterialPicker([]);
   }
+  updateProfitPreview();
   document.getElementById('jewelry-modal').classList.add('open');
+}
+
+function updateProfitPreview(){
+  const price = Number(document.getElementById('jewelry-price').value) || 0;
+  const cost = Number(document.getElementById('jewelry-cost').value) || 0;
+  const profit = price - cost;
+  document.getElementById('profit-preview').textContent = (price || cost) ? `Profit per piece: ${euro(profit)}` : '';
 }
 
 function saveJewelry(){
@@ -594,6 +665,7 @@ function saveJewelry(){
     category: document.getElementById('jewelry-category').value,
     color: document.getElementById('jewelry-color').value.trim(),
     price: Number(document.getElementById('jewelry-price').value)||0,
+    cost: Number(document.getElementById('jewelry-cost').value)||0,
     hasPhysical: document.getElementById('jewelry-physical').value === 'yes',
     image: document.getElementById('jewelry-image').value,
     materials,
@@ -667,6 +739,7 @@ function renderJewelry(){
           <span class="price">${euro(j.price)}</span>
           <span style="color:var(--ink-soft)">Bought ${j.timesBought}×</span>
         </div>
+        <p style="margin:0 0 10px;font-size:12px;color:var(--sage);">Profit / piece: ${euro((j.price||0)-(j.cost||0))}</p>
         <div class="actions">
           <button class="ghost" style="flex:1;padding:8px;" onclick="openJewelryModal('${j.id}')">Edit</button>
           <button class="link danger" onclick="deleteJewelry('${j.id}')">Delete</button>
@@ -745,12 +818,18 @@ function renderSales(){
 function renderDashboard(){
   const totalSales = state.sales.length;
   const totalRevenue = state.sales.reduce((sum,s)=>sum+Number(s.amount||0),0);
+  const totalProfit = state.sales.reduce((sum,s)=>{
+    const j = state.jewelry.find(x=>x.id===s.jewelryId);
+    const cost = j ? Number(j.cost||0) : 0;
+    return sum + (Number(s.amount||0) - cost);
+  },0);
   const lowStock = state.materials.filter(m=>m.quantity<=m.reorderPoint).length;
   const topPiece = [...state.jewelry].sort((a,b)=>b.timesBought-a.timesBought)[0];
 
   document.getElementById('stat-row').innerHTML = `
     <div class="stat"><p class="label">Total sales</p><p class="value">${totalSales}</p></div>
     <div class="stat"><p class="label">Total revenue</p><p class="value">${euro(totalRevenue)}</p></div>
+    <div class="stat"><p class="label">Total profit</p><p class="value">${euro(totalProfit)}</p></div>
     <div class="stat"><p class="label">Materials to restock</p><p class="value">${lowStock}</p></div>
     <div class="stat"><p class="label">Best seller</p><p class="value" style="font-size:16px;">${topPiece && topPiece.timesBought>0 ? escapeHtml(topPiece.name) : '—'}</p></div>
   `;
@@ -784,11 +863,47 @@ function renderDashboard(){
   });
 }
 
+// ---------- NOTES ----------
+function addNote(){
+  const input = document.getElementById('note-input');
+  const text = input.value.trim();
+  if(!text) return;
+  state.notes.push({ id: uid(), text, createdAt: Date.now() });
+  input.value = '';
+  saveData();
+  renderNotes();
+}
+
+function deleteNote(id){
+  state.notes = state.notes.filter(n=>n.id!==id);
+  saveData();
+  renderNotes();
+}
+
+function renderNotes(){
+  const wrap = document.getElementById('notes-list-wrap');
+  if(!state.notes || state.notes.length===0){
+    wrap.innerHTML = `<div class="empty"><p class="display">No notes yet</p><p>Jot down anything you don't want to forget.</p></div>`;
+    return;
+  }
+  const sorted = [...state.notes].sort((a,b)=>b.createdAt-a.createdAt);
+  wrap.innerHTML = sorted.map(n=>`
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;justify-content:space-between;gap:14px;align-items:flex-start;">
+      <div>
+        <p style="margin:0 0 4px;font-size:13.5px;white-space:pre-wrap;">${escapeHtml(n.text)}</p>
+        <p style="margin:0;font-size:11.5px;color:var(--ink-soft);">${new Date(n.createdAt).toLocaleString('en-IE',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}</p>
+      </div>
+      <button class="link danger" onclick="deleteNote('${n.id}')">Delete</button>
+    </div>
+  `).join('');
+}
+
 function renderAll(){
   renderMaterials();
   renderJewelry();
   renderSales();
   renderDashboard();
+  renderNotes();
 }
 
 loadData();
