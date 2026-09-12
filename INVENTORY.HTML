@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BibiJanelle — Studio Ledger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<style>
+  :root{
+    --ink:#2b2330;
+    --ink-soft:#6b6070;
+    --cream:#faf6f0;
+    --card:#ffffff;
+    --line:#e9e1e4;
+    --gold:#b8935a;
+    --gold-deep:#8f6f42;
+    --rose:#c97b84;
+    --rose-bg:#fbeef0;
+    --sage:#7d9473;
+    --sage-bg:#eef3ec;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{font-family:'Fraunces',serif;font-weight:500;}
+  .app{display:flex;min-height:100vh;}
+
+  .sidebar{
+    width:220px;
+    flex-shrink:0;
+    background:var(--card);
+    border-right:1px solid var(--line);
+    padding:28px 18px;
+    position:sticky;
+    top:0;
+    height:100vh;
+  }
+  .brand{font-size:22px;line-height:1.2;margin:0 0 4px 2px;}
+  .brand-sub{font-size:12px;color:var(--ink-soft);margin:0 0 32px 2px;}
+  .nav{display:flex;flex-direction:column;gap:4px;}
+  .nav button{
+    text-align:left;
+    background:none;
+    border:none;
+    font-family:'Inter',sans-serif;
+    font-size:14.5px;
+    color:var(--ink-soft);
+    padding:10px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .nav button:hover{background:var(--cream);}
+  .nav button.active{background:var(--sage-bg);color:var(--sage);font-weight:500;}
+  .nav .dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5;flex-shrink:0;}
+
+  .main{flex:1;padding:36px 44px;max-width:1180px;}
+  .page{display:none;}
+  .page.active{display:block;}
+  .page-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:26px;gap:16px;flex-wrap:wrap;}
+  .page-head h1{font-size:26px;margin:0;}
+  .page-head p{margin:4px 0 0;color:var(--ink-soft);font-size:13.5px;}
+
+  button.primary{
+    background:var(--ink);
+    color:#fff;
+    border:none;
+    padding:10px 18px;
+    border-radius:8px;
+    font-family:'Inter',sans-serif;
+    font-size:13.5px;
+    font-weight:500;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  button.primary:hover{background:#1b1620;}
+  button.ghost{
+    background:none;
+    border:1px solid var(--line);
+    color:var(--ink);
+    padding:9px 14px;
+    border-radius:8px;
+    font-family:'Inter',sans-serif;
+    font-size:13px;
+    cursor:pointer;
+  }
+  button.ghost:hover{border-color:var(--ink-soft);}
+  button.link{background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:12.5px;text-decoration:underline;padding:0;}
+  button.link.danger{color:var(--rose);}
+
+  table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden;border:1px solid var(--line);}
+  th,td{text-align:left;padding:12px 14px;font-size:13.5px;border-bottom:1px solid var(--line);}
+  th{color:var(--ink-soft);font-weight:500;font-size:11.5px;letter-spacing:.02em;background:#fcfaf7;}
+  tr:last-child td{border-bottom:none;}
+  .badge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;padding:3px 9px;border-radius:20px;font-weight:500;}
+  .badge.low{background:var(--rose-bg);color:#96434c;}
+  .badge.ok{background:var(--sage-bg);color:#4c5f45;}
+  .num{font-variant-numeric:tabular-nums;}
+
+  .empty{
+    background:var(--card);
+    border:1px dashed var(--line);
+    border-radius:12px;
+    padding:48px 24px;
+    text-align:center;
+    color:var(--ink-soft);
+  }
+  .empty .display{font-size:18px;color:var(--ink);margin-bottom:6px;}
+
+  .modal-backdrop{
+    display:none;
+    position:fixed;inset:0;
+    background:rgba(43,35,48,.35);
+    align-items:flex-start;
+    justify-content:center;
+    padding:48px 16px;
+    overflow-y:auto;
+    z-index:50;
+  }
+  .modal-backdrop.open{display:flex;}
+  .modal{
+    background:var(--card);
+    border-radius:14px;
+    padding:28px;
+    width:100%;
+    max-width:480px;
+  }
+  .modal h2{font-size:19px;margin:0 0 18px;}
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:5px;}
+  .field input, .field select{
+    width:100%;
+    padding:9px 11px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    font-family:'Inter',sans-serif;
+    font-size:13.5px;
+    background:#fff;
+    color:var(--ink);
+  }
+  .field input:focus, .field select:focus{outline:2px solid var(--gold);outline-offset:1px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;}
+
+  .material-picker{border:1px solid var(--line);border-radius:10px;padding:10px;max-height:180px;overflow-y:auto;}
+  .material-row{display:flex;align-items:center;gap:8px;padding:6px 2px;font-size:13px;}
+  .material-row span.mname{flex:1;}
+  .material-row input[type=number]{width:64px;padding:5px 7px;font-size:12.5px;}
+  .material-row input[type=checkbox]{width:16px;height:16px;}
+
+  .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;align-items:center;}
+  .filters input[type=search]{
+    padding:9px 13px;border:1px solid var(--line);border-radius:20px;font-size:13.5px;
+    font-family:'Inter',sans-serif;min-width:200px;background:#fff;
+  }
+  .filters select{padding:8px 12px;border:1px solid var(--line);border-radius:20px;font-size:13px;background:#fff;font-family:'Inter',sans-serif;color:var(--ink);}
+
+  .jewelry-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;}
+  .jcard{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+  .jcard .thumb{
+    height:170px;background:var(--sage-bg);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--ink-soft);font-size:12px;overflow:hidden;position:relative;
+  }
+  .jcard .thumb img{width:100%;height:100%;object-fit:cover;}
+  .jcard .body{padding:14px;}
+  .jcard .jname{font-family:'Fraunces',serif;font-size:16px;margin:0 0 2px;}
+  .jcard .jmeta{font-size:12px;color:var(--ink-soft);margin-bottom:10px;}
+  .jcard .jstats{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;margin-bottom:10px;}
+  .jcard .price{font-weight:600;}
+  .jcard .actions{display:flex;gap:8px;}
+  .swatch{width:12px;height:12px;border-radius:50%;display:inline-block;margin-right:5px;border:1px solid rgba(0,0,0,.1);vertical-align:-1px;}
+  .physical-pill{font-size:10.5px;padding:2px 8px;border-radius:20px;background:var(--gold);color:#fff;position:absolute;top:8px;left:8px;}
+
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;}
+  .stat .label{font-size:12px;color:var(--ink-soft);}
+  .stat .value{font-family:'Fraunces',serif;font-size:24px;margin-top:4px;}
+  .chart-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;}
+
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+
+  @media(max-width:820px){
+    .app{flex-direction:column;}
+    .sidebar{width:100%;height:auto;position:relative;padding:16px;}
+    .nav{flex-direction:row;overflow-x:auto;}
+    .main{padding:22px 18px;}
+    .row2{grid-template-columns:1fr;}
+    .stat-row{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+</head>
+<body>
+<h1 class="sr-only">BibiJanelle studio ledger: track materials, jewelry pieces, and sales</h1>
+
+<div class="app">
+  <aside class="sidebar">
+    <p class="brand">BibiJanelle</p>
+    <p class="brand-sub">Studio ledger</p>
+    <nav class="nav">
+      <button class="nav-btn active" data-page="materials"><span class="dot"></span>Materials</button>
+      <button class="nav-btn" data-page="jewelry"><span class="dot"></span>Jewelry</button>
+      <button class="nav-btn" data-page="sales"><span class="dot"></span>Sales</button>
+      <button class="nav-btn" data-page="dashboard"><span class="dot"></span>Dashboard</button>
+    </nav>
+  </aside>
+
+  <main class="main">
+
+    <!-- MATERIALS -->
+    <section class="page active" id="page-materials">
+      <div class="page-head">
+        <div>
+          <h1>Materials</h1>
+          <p>What you've bought, from where, and what's running low.</p>
+        </div>
+        <button class="primary" onclick="openMaterialModal()">Add material</button>
+      </div>
+      <div id="materials-table-wrap"></div>
+    </section>
+
+    <!-- JEWELRY -->
+    <section class="page" id="page-jewelry">
+      <div class="page-head">
+        <div>
+          <h1>Jewelry</h1>
+          <p>Every piece, its materials, and how it's performing.</p>
+        </div>
+        <button class="primary" onclick="openJewelryModal()">Add piece</button>
+      </div>
+      <div class="filters">
+        <input type="search" id="jewelry-search" placeholder="Search jewelry..." oninput="renderJewelry()">
+        <select id="filter-category" onchange="renderJewelry()">
+          <option value="">All types</option>
+          <option value="necklace">Necklace</option>
+          <option value="bracelet">Bracelet</option>
+          <option value="earrings">Earrings</option>
+          <option value="bag">Bag</option>
+          <option value="coaster">Coaster</option>
+          <option value="other">Other</option>
+        </select>
+        <select id="filter-color" onchange="renderJewelry()">
+          <option value="">All colors</option>
+        </select>
+        <select id="sort-jewelry" onchange="renderJewelry()">
+          <option value="newest">Newest first</option>
+          <option value="bought-desc">Most bought</option>
+          <option value="bought-asc">Least bought</option>
+          <option value="price-desc">Most expensive</option>
+          <option value="price-asc">Least expensive</option>
+        </select>
+      </div>
+      <div id="jewelry-grid-wrap"></div>
+    </section>
+
+    <!-- SALES -->
+    <section class="page" id="page-sales">
+      <div class="page-head">
+        <div>
+          <h1>Sales</h1>
+          <p>Log every sale — this also updates stock and piece totals.</p>
+        </div>
+        <button class="primary" onclick="openSaleModal()">Log a sale</button>
+      </div>
+      <div id="sales-table-wrap"></div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section class="page" id="page-dashboard">
+      <div class="page-head">
+        <div>
+          <h1>Dashboard</h1>
+          <p>Sales over time, at a glance.</p>
+        </div>
+      </div>
+      <div class="stat-row" id="stat-row"></div>
+      <div class="chart-card">
+        <canvas id="monthly-chart" height="90"></canvas>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- MATERIAL MODAL -->
+<div class="modal-backdrop" id="material-modal">
+  <div class="modal">
+    <h2 id="material-modal-title">Add material</h2>
+    <input type="hidden" id="material-id">
+    <div class="field"><label>Material name</label><input type="text" id="material-name" placeholder="e.g. Gold-plated jump rings"></div>
+    <div class="row2">
+      <div class="field"><label>Date bought</label><input type="date" id="material-date"></div>
+      <div class="field"><label>Bought from</label><input type="text" id="material-supplier" placeholder="Supplier"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Quantity in stock</label><input type="number" id="material-quantity" min="0" step="1"></div>
+      <div class="field"><label>Price per piece (€)</label><input type="number" id="material-unitprice" min="0" step="0.01"></div>
+    </div>
+    <div class="field"><label>Restock when quantity falls below</label><input type="number" id="material-reorder" min="0" step="1" placeholder="e.g. 10"></div>
+    <div class="modal-actions">
+      <button class="ghost" onclick="closeModal('material-modal')">Cancel</button>
+      <button class="primary" onclick="saveMaterial()">Save material</button>
+    </div>
+  </div>
+</div>
+
+<!-- JEWELRY MODAL -->
+<div class="modal-backdrop" id="jewelry-modal">
+  <div class="modal" style="max-width:540px;">
+    <h2 id="jewelry-modal-title">Add jewelry piece</h2>
+    <input type="hidden" id="jewelry-id">
+    <div class="field"><label>Name</label><input type="text" id="jewelry-name" placeholder="e.g. Amara beaded necklace"></div>
+    <div class="row2">
+      <div class="field">
+        <label>Type</label>
+        <select id="jewelry-category">
+          <option value="necklace">Necklace</option>
+          <option value="bracelet">Bracelet</option>
+          <option value="earrings">Earrings</option>
+          <option value="bag">Bag</option>
+          <option value="coaster">Coaster</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="field"><label>Color</label><input type="text" id="jewelry-color" placeholder="e.g. Terracotta"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Price (€)</label><input type="number" id="jewelry-price" min="0" step="0.01"></div>
+      <div class="field">
+        <label>Physical piece with you?</label>
+        <select id="jewelry-physical">
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Photo</label>
+      <input type="file" id="jewelry-image-input" accept="image/*" onchange="handleImageUpload(event)">
+      <input type="hidden" id="jewelry-image">
+      <div id="image-preview" style="margin-top:8px;"></div>
+    </div>
+    <div class="field">
+      <label>Materials used &amp; quantity of each</label>
+      <div class="material-picker" id="material-picker"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="ghost" onclick="closeModal('jewelry-modal')">Cancel</button>
+      <button class="primary" onclick="saveJewelry()">Save piece</button>
+    </div>
+  </div>
+</div>
+
+<!-- SALE MODAL -->
+<div class="modal-backdrop" id="sale-modal">
+  <div class="modal">
+    <h2>Log a sale</h2>
+    <div class="field">
+      <label>Jewelry sold</label>
+      <select id="sale-jewelry"></select>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Bought by</label><input type="text" id="sale-buyer" placeholder="Customer name"></div>
+      <div class="field"><label>Date</label><input type="date" id="sale-date"></div>
+    </div>
+    <div class="field">
+      <label>Payment method</label>
+      <select id="sale-payment">
+        <option value="Cash">Cash</option>
+        <option value="Card">Card</option>
+        <option value="Bank transfer">Bank transfer</option>
+        <option value="PayPal">PayPal</option>
+        <option value="Revolut">Revolut</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="ghost" onclick="closeModal('sale-modal')">Cancel</button>
+      <button class="primary" onclick="saveSale()">Log sale</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let state = { materials: [], jewelry: [], sales: [] };
+let editingMaterialId = null;
+let editingJewelryId = null;
+let monthlyChart = null;
+
+const STORAGE_KEY = 'bibijanelle-ledger-data';
+
+async function loadData(){
+  try{
+    const res = await window.storage.get(STORAGE_KEY, false);
+    if(res && res.value){
+      state = JSON.parse(res.value);
+    }
+  }catch(e){
+    console.log('No saved data yet, starting fresh.');
+  }
+  renderAll();
+}
+
+async function saveData(){
+  try{
+    await window.storage.set(STORAGE_KEY, JSON.stringify(state), false);
+  }catch(e){
+    console.error('Could not save data', e);
+  }
+}
+
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function euro(n){ return '€' + Number(n||0).toFixed(2); }
+
+// ---------- NAV ----------
+document.querySelectorAll('.nav-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('page-'+btn.dataset.page).classList.add('active');
+    if(btn.dataset.page === 'dashboard') renderDashboard();
+  });
+});
+
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+// ---------- MATERIALS ----------
+function openMaterialModal(id){
+  editingMaterialId = id || null;
+  document.getElementById('material-modal-title').textContent = id ? 'Edit material' : 'Add material';
+  if(id){
+    const m = state.materials.find(x=>x.id===id);
+    document.getElementById('material-name').value = m.name;
+    document.getElementById('material-date').value = m.dateBought;
+    document.getElementById('material-supplier').value = m.supplier;
+    document.getElementById('material-quantity').value = m.quantity;
+    document.getElementById('material-unitprice').value = m.unitPrice;
+    document.getElementById('material-reorder').value = m.reorderPoint;
+  } else {
+    ['material-name','material-supplier','material-quantity','material-unitprice','material-reorder'].forEach(f=>document.getElementById(f).value='');
+    document.getElementById('material-date').value = new Date().toISOString().slice(0,10);
+  }
+  document.getElementById('material-modal').classList.add('open');
+}
+
+function saveMaterial(){
+  const name = document.getElementById('material-name').value.trim();
+  if(!name){ alert('Give the material a name first.'); return; }
+  const data = {
+    name,
+    dateBought: document.getElementById('material-date').value,
+    supplier: document.getElementById('material-supplier').value.trim(),
+    quantity: Number(document.getElementById('material-quantity').value) || 0,
+    unitPrice: Number(document.getElementById('material-unitprice').value) || 0,
+    reorderPoint: Number(document.getElementById('material-reorder').value) || 0,
+  };
+  if(editingMaterialId){
+    const m = state.materials.find(x=>x.id===editingMaterialId);
+    Object.assign(m, data);
+  } else {
+    state.materials.push({ id: uid(), ...data });
+  }
+  saveData();
+  renderMaterials();
+  closeModal('material-modal');
+}
+
+function deleteMaterial(id){
+  if(!confirm('Remove this material? It will also be unlinked from any jewelry using it.')) return;
+  state.materials = state.materials.filter(m=>m.id!==id);
+  state.jewelry.forEach(j=>{ j.materials = j.materials.filter(mu=>mu.materialId!==id); });
+  saveData();
+  renderMaterials();
+}
+
+function renderMaterials(){
+  const wrap = document.getElementById('materials-table-wrap');
+  if(state.materials.length === 0){
+    wrap.innerHTML = `<div class="empty"><p class="display">No materials yet</p><p>Add the first bead, clasp, or chain you bought to start tracking stock.</p></div>`;
+    return;
+  }
+  const rows = state.materials.map(m=>{
+    const low = m.quantity <= m.reorderPoint;
+    return `<tr>
+      <td>${escapeHtml(m.name)}</td>
+      <td>${m.dateBought||'—'}</td>
+      <td>${escapeHtml(m.supplier)||'—'}</td>
+      <td class="num">${m.quantity}</td>
+      <td class="num">${euro(m.unitPrice)}</td>
+      <td>${low ? `<span class="badge low">Restock</span>` : `<span class="badge ok">Stocked</span>`}</td>
+      <td><button class="link" onclick="openMaterialModal('${m.id}')">Edit</button> &nbsp;<button class="link danger" onclick="deleteMaterial('${m.id}')">Delete</button></td>
+    </tr>`;
+  }).join('');
+  wrap.innerHTML = `<table>
+    <thead><tr><th>Material</th><th>Date bought</th><th>Bought from</th><th>Qty</th><th>Price / piece</th><th>Stock</th><th></th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+// ---------- JEWELRY ----------
+function renderMaterialPicker(selected){
+  const picker = document.getElementById('material-picker');
+  if(state.materials.length === 0){
+    picker.innerHTML = `<p style="color:var(--ink-soft);font-size:13px;margin:4px;">Add materials first, then come back to link them here.</p>`;
+    return;
+  }
+  const sel = {};
+  (selected||[]).forEach(s=>sel[s.materialId]=s.qty);
+  picker.innerHTML = state.materials.map(m=>{
+    const checked = sel[m.id] !== undefined;
+    return `<label class="material-row">
+      <input type="checkbox" data-mid="${m.id}" ${checked?'checked':''} onchange="toggleQtyInput('${m.id}')">
+      <span class="mname">${escapeHtml(m.name)}</span>
+      <input type="number" min="1" step="1" value="${checked?sel[m.id]:1}" data-qty="${m.id}" placeholder="qty" ${checked?'':'style="visibility:hidden"'}>
+    </label>`;
+  }).join('');
+}
+
+function toggleQtyInput(mid){
+  const cb = document.querySelector(`input[data-mid="${mid}"]`);
+  const qty = document.querySelector(`input[data-qty="${mid}"]`);
+  qty.style.visibility = cb.checked ? 'visible' : 'hidden';
+}
+
+function handleImageUpload(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    const img = new Image();
+    img.onload = function(){
+      const maxW = 480;
+      const scale = Math.min(1, maxW/img.width);
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width*scale;
+      canvas.height = img.height*scale;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img,0,0,canvas.width,canvas.height);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+      document.getElementById('jewelry-image').value = dataUrl;
+      document.getElementById('image-preview').innerHTML = `<img src="${dataUrl}" style="width:100px;height:100px;object-fit:cover;border-radius:8px;">`;
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function openJewelryModal(id){
+  editingJewelryId = id || null;
+  document.getElementById('jewelry-modal-title').textContent = id ? 'Edit piece' : 'Add jewelry piece';
+  document.getElementById('image-preview').innerHTML = '';
+  if(id){
+    const j = state.jewelry.find(x=>x.id===id);
+    document.getElementById('jewelry-name').value = j.name;
+    document.getElementById('jewelry-category').value = j.category;
+    document.getElementById('jewelry-color').value = j.color;
+    document.getElementById('jewelry-price').value = j.price;
+    document.getElementById('jewelry-physical').value = j.hasPhysical ? 'yes':'no';
+    document.getElementById('jewelry-image').value = j.image || '';
+    if(j.image) document.getElementById('image-preview').innerHTML = `<img src="${j.image}" style="width:100px;height:100px;object-fit:cover;border-radius:8px;">`;
+    renderMaterialPicker(j.materials);
+  } else {
+    ['jewelry-name','jewelry-color','jewelry-price','jewelry-image'].forEach(f=>document.getElementById(f).value='');
+    document.getElementById('jewelry-category').value = 'necklace';
+    document.getElementById('jewelry-physical').value = 'yes';
+    renderMaterialPicker([]);
+  }
+  document.getElementById('jewelry-modal').classList.add('open');
+}
+
+function saveJewelry(){
+  const name = document.getElementById('jewelry-name').value.trim();
+  if(!name){ alert('Give the piece a name first.'); return; }
+  const materials = [];
+  document.querySelectorAll('#material-picker input[type=checkbox]').forEach(cb=>{
+    if(cb.checked){
+      const qtyInput = document.querySelector(`input[data-qty="${cb.dataset.mid}"]`);
+      materials.push({ materialId: cb.dataset.mid, qty: Number(qtyInput.value)||1 });
+    }
+  });
+  const data = {
+    name,
+    category: document.getElementById('jewelry-category').value,
+    color: document.getElementById('jewelry-color').value.trim(),
+    price: Number(document.getElementById('jewelry-price').value)||0,
+    hasPhysical: document.getElementById('jewelry-physical').value === 'yes',
+    image: document.getElementById('jewelry-image').value,
+    materials,
+  };
+  if(editingJewelryId){
+    const j = state.jewelry.find(x=>x.id===editingJewelryId);
+    Object.assign(j, data);
+  } else {
+    state.jewelry.push({ id: uid(), timesBought: 0, createdAt: Date.now(), ...data });
+  }
+  saveData();
+  renderJewelry();
+  closeModal('jewelry-modal');
+}
+
+function deleteJewelry(id){
+  if(!confirm('Remove this piece? Its past sales history stays on record.')) return;
+  state.jewelry = state.jewelry.filter(j=>j.id!==id);
+  saveData();
+  renderJewelry();
+}
+
+function populateColorFilter(){
+  const sel = document.getElementById('filter-color');
+  const current = sel.value;
+  const colors = [...new Set(state.jewelry.map(j=>j.color).filter(Boolean))];
+  sel.innerHTML = '<option value="">All colors</option>' + colors.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+  sel.value = current;
+}
+
+function renderJewelry(){
+  populateColorFilter();
+  const search = document.getElementById('jewelry-search').value.toLowerCase();
+  const cat = document.getElementById('filter-category').value;
+  const color = document.getElementById('filter-color').value;
+  const sort = document.getElementById('sort-jewelry').value;
+
+  let list = state.jewelry.filter(j=>{
+    if(search && !j.name.toLowerCase().includes(search)) return false;
+    if(cat && j.category !== cat) return false;
+    if(color && j.color !== color) return false;
+    return true;
+  });
+
+  if(sort==='bought-desc') list.sort((a,b)=>b.timesBought-a.timesBought);
+  else if(sort==='bought-asc') list.sort((a,b)=>a.timesBought-b.timesBought);
+  else if(sort==='price-desc') list.sort((a,b)=>b.price-a.price);
+  else if(sort==='price-asc') list.sort((a,b)=>a.price-b.price);
+  else list.sort((a,b)=>b.createdAt-a.createdAt);
+
+  const wrap = document.getElementById('jewelry-grid-wrap');
+  if(state.jewelry.length === 0){
+    wrap.innerHTML = `<div class="empty"><p class="display">No jewelry yet</p><p>Add a piece and link it to the materials that make it.</p></div>`;
+    return;
+  }
+  if(list.length === 0){
+    wrap.innerHTML = `<div class="empty"><p class="display">Nothing matches</p><p>Try clearing a filter or search term.</p></div>`;
+    return;
+  }
+
+  wrap.innerHTML = `<div class="jewelry-grid">${list.map(j=>`
+    <div class="jcard">
+      <div class="thumb">
+        ${j.hasPhysical ? '<span class="physical-pill">In hand</span>' : ''}
+        ${j.image ? `<img src="${j.image}" alt="${escapeHtml(j.name)}">` : 'No photo yet'}
+      </div>
+      <div class="body">
+        <p class="jname">${escapeHtml(j.name)}</p>
+        <p class="jmeta">${j.color?`<span class="swatch" style="background:${escapeHtml(j.color)}"></span>`:''}${escapeHtml(j.color||'')} ${j.color?'· ':''}${capitalize(j.category)}</p>
+        <div class="jstats">
+          <span class="price">${euro(j.price)}</span>
+          <span style="color:var(--ink-soft)">Bought ${j.timesBought}×</span>
+        </div>
+        <div class="actions">
+          <button class="ghost" style="flex:1;padding:8px;" onclick="openJewelryModal('${j.id}')">Edit</button>
+          <button class="link danger" onclick="deleteJewelry('${j.id}')">Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('')}</div>`;
+}
+
+function capitalize(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : ''; }
+function escapeHtml(s){ return (s||'').toString().replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// ---------- SALES ----------
+function openSaleModal(){
+  const sel = document.getElementById('sale-jewelry');
+  sel.innerHTML = state.jewelry.map(j=>`<option value="${j.id}">${escapeHtml(j.name)} — ${euro(j.price)}</option>`).join('');
+  if(state.jewelry.length===0){ sel.innerHTML = '<option value="">Add a jewelry piece first</option>'; }
+  document.getElementById('sale-buyer').value = '';
+  document.getElementById('sale-date').value = new Date().toISOString().slice(0,10);
+  document.getElementById('sale-payment').value = 'Cash';
+  document.getElementById('sale-modal').classList.add('open');
+}
+
+function saveSale(){
+  const jewelryId = document.getElementById('sale-jewelry').value;
+  if(!jewelryId){ alert('Add a jewelry piece before logging a sale.'); return; }
+  const buyer = document.getElementById('sale-buyer').value.trim();
+  const date = document.getElementById('sale-date').value;
+  const payment = document.getElementById('sale-payment').value;
+
+  const j = state.jewelry.find(x=>x.id===jewelryId);
+  j.timesBought += 1;
+  j.materials.forEach(mu=>{
+    const m = state.materials.find(x=>x.id===mu.materialId);
+    if(m) m.quantity = Math.max(0, m.quantity - mu.qty);
+  });
+
+  state.sales.push({ id: uid(), jewelryId, jewelryName: j.name, buyer, date, payment, amount: j.price });
+  saveData();
+  renderSales();
+  renderJewelry();
+  renderMaterials();
+  closeModal('sale-modal');
+}
+
+function deleteSale(id){
+  if(!confirm('Remove this sale record?')) return;
+  state.sales = state.sales.filter(s=>s.id!==id);
+  saveData();
+  renderSales();
+}
+
+function renderSales(){
+  const wrap = document.getElementById('sales-table-wrap');
+  if(state.sales.length===0){
+    wrap.innerHTML = `<div class="empty"><p class="display">No sales logged yet</p><p>Log a sale to start tracking who bought what, and see your monthly trend.</p></div>`;
+    return;
+  }
+  const rows = [...state.sales].sort((a,b)=>new Date(b.date)-new Date(a.date)).map(s=>`
+    <tr>
+      <td>${escapeHtml(s.jewelryName)}</td>
+      <td>${escapeHtml(s.buyer)||'—'}</td>
+      <td>${s.date||'—'}</td>
+      <td>${escapeHtml(s.payment)}</td>
+      <td class="num">${euro(s.amount)}</td>
+      <td><button class="link danger" onclick="deleteSale('${s.id}')">Delete</button></td>
+    </tr>
+  `).join('');
+  wrap.innerHTML = `<table>
+    <thead><tr><th>Jewelry</th><th>Bought by</th><th>Date</th><th>Payment</th><th>Amount</th><th></th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+// ---------- DASHBOARD ----------
+function renderDashboard(){
+  const totalSales = state.sales.length;
+  const totalRevenue = state.sales.reduce((sum,s)=>sum+Number(s.amount||0),0);
+  const lowStock = state.materials.filter(m=>m.quantity<=m.reorderPoint).length;
+  const topPiece = [...state.jewelry].sort((a,b)=>b.timesBought-a.timesBought)[0];
+
+  document.getElementById('stat-row').innerHTML = `
+    <div class="stat"><p class="label">Total sales</p><p class="value">${totalSales}</p></div>
+    <div class="stat"><p class="label">Total revenue</p><p class="value">${euro(totalRevenue)}</p></div>
+    <div class="stat"><p class="label">Materials to restock</p><p class="value">${lowStock}</p></div>
+    <div class="stat"><p class="label">Best seller</p><p class="value" style="font-size:16px;">${topPiece && topPiece.timesBought>0 ? escapeHtml(topPiece.name) : '—'}</p></div>
+  `;
+
+  const byMonth = {};
+  state.sales.forEach(s=>{
+    if(!s.date) return;
+    const key = s.date.slice(0,7);
+    byMonth[key] = (byMonth[key]||0)+1;
+  });
+  const months = Object.keys(byMonth).sort();
+  const labels = months.map(m=>{
+    const [y,mo] = m.split('-');
+    return new Date(y,mo-1).toLocaleString('en-IE',{month:'short',year:'2-digit'});
+  });
+  const data = months.map(m=>byMonth[m]);
+
+  const ctx = document.getElementById('monthly-chart').getContext('2d');
+  if(monthlyChart) monthlyChart.destroy();
+  monthlyChart = new Chart(ctx, {
+    type:'bar',
+    data:{ labels, datasets:[{ label:'Pieces sold', data, backgroundColor:'#b8935a', borderRadius:6, maxBarThickness:44 }] },
+    options:{
+      responsive:true,
+      plugins:{ legend:{display:false} },
+      scales:{
+        y:{ beginAtZero:true, ticks:{ precision:0, color:'#6b6070' }, grid:{ color:'#e9e1e4' } },
+        x:{ ticks:{ color:'#6b6070' }, grid:{ display:false } }
+      }
+    }
+  });
+}
+
+function renderAll(){
+  renderMaterials();
+  renderJewelry();
+  renderSales();
+  renderDashboard();
+}
+
+loadData();
+</script>
+</body>
+</html>
